@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
+            $table->unsignedBigInteger('team_id')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('team_id')->constrained('teams');
             $table->timestamps();
         });
     }
