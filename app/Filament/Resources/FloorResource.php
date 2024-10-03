@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FloorResource\Pages;
 use App\Models\Floor;
-use App\Models\Company; // Import the Company model
+use App\Models\Company; 
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Resource;
@@ -22,8 +22,8 @@ class FloorResource extends Resource
         return $form
             ->schema([
                 Select::make('company_id')
-                    ->relationship('company', 'name') // Assuming you have a relationship defined in the Floor model
-                    ->required(), // Make this field required
+                    ->relationship('company', 'name') 
+                    ->required(), 
                 TextInput::make('name')->required(),
                 TextInput::make('floor_number')->numeric()->required(),
             ]);
@@ -33,12 +33,12 @@ class FloorResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company.name')->label('Company'), // Show the company name
+                Tables\Columns\TextColumn::make('company.name')->label('Company'), 
                 Tables\Columns\TextColumn::make('name')->label('Floor Name'),
                 Tables\Columns\TextColumn::make('floor_number')->label('Floor Number'),
             ])
             ->filters([
-                // Add filters if necessary
+               
             ]);
     }
 

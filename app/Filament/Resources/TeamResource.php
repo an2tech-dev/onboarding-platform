@@ -17,7 +17,7 @@ class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-users';
+    
 
     public static function form(Form $form): Form
     {
@@ -40,7 +40,7 @@ class TeamResource extends Resource
                 Tables\Columns\TextColumn::make('members_count')->label('Members Count'),
             ])
             ->filters([
-                // Add filters if necessary
+         
             ]);
     }
 
