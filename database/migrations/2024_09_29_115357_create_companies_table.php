@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->year('established');
+            $table->date('established');
             $table->integer('team_members');
             $table->integer('office_size');
             $table->timestamps();

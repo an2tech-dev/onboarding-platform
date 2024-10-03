@@ -13,7 +13,7 @@ class Schedules extends Model
 
     public function process()
     {
-        return $this->belongsTo(Process::class);
+        return $this->belongsTo(Processes::class);
     }
 
 }
