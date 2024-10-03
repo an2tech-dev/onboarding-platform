@@ -6,6 +6,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\ScheduleController;
 
 
 
@@ -32,3 +34,13 @@ Route::get('/user', function (Request $request) {
     Route::post('/floors', [FloorController::class, 'store']);
     Route::put('/floors/{id}', [FloorController::class, 'update']);
     Route::delete('/floors/{id}', [FloorController::class, 'destroy']);
+
+    Route::get('/processes', [ProcessController::class, 'index']);
+    Route::post('/processes', [ProcessController::class, 'store']);
+    Route::put('/process/{id}', [ProcessController::class, 'update']);
+    Route::delete('/process/{id}', [ProcessController::class, 'destroy']);
+
+    Route::get('/schedules', [ScheduleController::class, 'index']);
+    Route::post('/schedules', [ScheduleController::class, 'store']);
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
