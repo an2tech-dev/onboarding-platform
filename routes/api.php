@@ -44,3 +44,8 @@ Route::get('/user', function (Request $request) {
     Route::post('/schedules', [ScheduleController::class, 'store']);
     Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+
+    Route::get('/resources', [ResourceController::class, 'index']);
+    Route::post('/resources', [ResourceController::class, 'store']);
+    Route::put('/resources/{id}', [ResourceController::class, 'update']);
+    Route::delete('/resources/{id}', [ResourceController::class, 'destroy']);
