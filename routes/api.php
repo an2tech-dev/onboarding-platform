@@ -8,6 +8,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\UserController;
 
 
 
@@ -49,3 +50,8 @@ Route::get('/user', function (Request $request) {
     Route::post('/resources', [ResourceController::class, 'store']);
     Route::put('/resources/{id}', [ResourceController::class, 'update']);
     Route::delete('/resources/{id}', [ResourceController::class, 'destroy']);
+
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
