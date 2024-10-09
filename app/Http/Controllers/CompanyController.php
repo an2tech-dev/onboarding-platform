@@ -9,11 +9,14 @@ class CompanyController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Company::class);
         return response()->json(Company::all());
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Company::class);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -29,6 +32,7 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         $company = Company::findOrFail($id);
+        $this->authorize('update', $company);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -45,6 +49,8 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
+        $this->authorize('delete', $company);
+
         $company->delete();
         return response()->json(null, 204);
     }
