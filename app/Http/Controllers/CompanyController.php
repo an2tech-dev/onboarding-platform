@@ -3,42 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 
-class CompanyController extends Controller
+class CompanyController extends Controller  
 {
-    public function index()
+    public function __construct()
     {
-        return response()->json(Company::all());
+        $this->middleware(['role:Administrator|Manager'])->only(['update']);
+        $this->middleware(['role:Administrator'])->only(['store', 'destroy']);
+        $this->middleware(['role:Administrator|Manager'])->only(['index', 'show']);
     }
 
-    public function store(Request $request)
+    public function index()
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'established' => 'required|integer',
-            'team_members' => 'required|integer',
-            'office_size' => 'required|integer',
-        ]);
+        if (auth()->user()->hasRole('Administrator')) {
+            $companies = Company::all();
+        } else {
+            $companies = auth()->user()->company ? [auth()->user()->company] : [];
+        }
 
-        $company = Company::create($validated);
+        return response()->json($companies);
+    }
+
+    public function store(StoreCompanyRequest $request)
+    {
+        $company = Company::create($request->validated());
         return response()->json($company, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
         $company = Company::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'established' => 'required|integer',
-            'team_members' => 'required|integer',
-            'office_size' => 'required|integer',
-        ]);
+        if (auth()->user()->hasRole('Manager') && auth()->user()->company_id !== $company->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
 
-        $company->update($validated);
+        $company->update($request->validated());
+
         return response()->json($company);
     }
 
