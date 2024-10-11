@@ -1,14 +1,15 @@
 <?php
-
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Spatie\Permission\Models\Role; 
 
 class UserResource extends Resource
 {
@@ -23,6 +24,13 @@ class UserResource extends Resource
                 TextInput::make('password')
                     ->password()
                     ->required(fn ($record) => $record === null),
+
+                Select::make('roles')
+                    ->label('Role')
+                    ->options(Role::all()->pluck('name', 'name')) 
+                    ->relationship('roles', 'name') 
+                    ->required()
+                    ->disablePlaceholderSelection(), 
             ]);
     }
 
@@ -32,10 +40,10 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Name'),
                 Tables\Columns\TextColumn::make('email')->label('Email'),
+                Tables\Columns\TextColumn::make('roles.name')->label('Role')
+                    ->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state),
             ])
-            ->filters([
-                
-            ]);
+            ->filters([]);
     }
 
     public static function getPages(): array
