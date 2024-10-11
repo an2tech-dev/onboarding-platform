@@ -43,14 +43,13 @@ class CompanyResource extends Resource
     }
 
     public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListCompanies::route('/'),
-            'create' => Pages\CreateCompany::route('/create'),
-            'edit' => Pages\EditCompany::route('/{record}/edit'),
-        ];
-    }
-
+{
+    return [
+        'index' => Pages\ListCompanies::route('/'),
+        'create' => Pages\CreateCompany::route('/create'),
+        'edit' => Pages\EditCompany::route('/{record}/edit'),
+    ];
+}
     public static function canViewAny(): bool
     {
         return auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Manager');
