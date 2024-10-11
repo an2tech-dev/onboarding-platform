@@ -10,7 +10,7 @@ use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 
-
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
