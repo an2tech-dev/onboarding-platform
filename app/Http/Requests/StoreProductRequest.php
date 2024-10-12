@@ -18,8 +18,7 @@ class StoreProductRequest extends FormRequest
             'description' => 'nullable|string',
             'release_date' => 'required|date',
             'product_image' => 'nullable|image|max:2048',
-            'company_id' => 'required|exists:company,id', 
+            'company_id' => 'required|exists:company,id',
         ];
     }
-
 }

@@ -26,5 +26,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('/products', [ProductController::class, 'index'])->middleware('role:Administrator|Manager');
 Route::post('/products', [ProductController::class, 'store'])->middleware('role:Administrator|Manager');
 Route::put('/products/{id}', [ProductController::class, 'update'])->middleware('role:Administrator|Manager');
-Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middleware('role:Administrator');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });

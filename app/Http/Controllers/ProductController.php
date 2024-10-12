@@ -29,6 +29,12 @@ class ProductController extends Controller
     $data = $request->validated();
     \Log::info('Product data:', $data); 
 
+    if (auth()->user()->hasRole('Manager')) {
+        if ($data['company_id'] !== auth()->user()->company_id) {
+            return response()->json(['error' => 'Unauthorized to create a product for this company'], 403);
+        }
+    }
+
     try {
         $product = Product::create($data);
         \Log::info('Product created:', $product->toArray()); 
@@ -39,17 +45,29 @@ class ProductController extends Controller
     }
 }
 
-    public function update(UpdateProductRequest $request, $id)
-    {
-        $product = Product::findOrFail($id);
 
-        if (auth()->user()->hasRole('Manager') && auth()->user()->company_id !== $product->company_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+public function update(UpdateProductRequest $request, $id)
+{
+    $data = $request->validated();
+    \Log::info('Update Product data:', $data);
+
+    $product = Product::findOrFail($id);
+
+    if (auth()->user()->hasRole('Manager')) {
+        if ($product->company_id !== auth()->user()->company_id) {
+            return response()->json(['error' => 'Unauthorized to update this product'], 403);
         }
-
-        $product->update($request->validated());
-        return response()->json($product);
     }
+
+    try {
+        $product->update($data);
+        \Log::info('Product updated:', $product->toArray());
+        return response()->json($product);
+    } catch (\Exception $e) {
+        \Log::error('Product update failed: ' . $e->getMessage());
+        return response()->json(['error' => 'Product could not be updated'], 500);
+    }
+}
 
     public function destroy($id)
     {
