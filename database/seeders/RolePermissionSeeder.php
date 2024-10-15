@@ -21,6 +21,12 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'view product']);
         Permission::firstOrCreate(['name' => 'update product']);
         Permission::firstOrCreate(['name' => 'delete product']);
+
+        //Processes Permissions
+        Permission::firstOrCreate(['name' => 'create processes']);
+        Permission::firstOrCreate(['name' => 'view processes']);
+        Permission::firstOrCreate(['name' => 'update processes']);
+        Permission::firstOrCreate(['name' => 'delete processes']);
     
         // Roles
         $admin = Role::firstOrCreate(['name' => 'Administrator']);
@@ -36,6 +42,10 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
+            'create processes',
+            'view processes',
+            'update processes',
+            'delete processes',
         ]);
     
         $manager->givePermissionTo([
@@ -45,6 +55,9 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
+            'create processes',
+            'view processes',
+            'update processes',
         ]);
     }
 }

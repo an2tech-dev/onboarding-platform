@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProcessesController;
+
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -28,3 +30,11 @@ Route::post('/products', [ProductController::class, 'store'])->middleware('role:
 Route::put('/products/{id}', [ProductController::class, 'update'])->middleware('role:Administrator|Manager');
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });
+
+// Processes Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/processes', [ProcessesController::class, 'index'])->middleware('role:Administrator|Manager');
+    Route::post('/processes', [ProcessesController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/processes/{id}', [ProcessesController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/processes/{id}', [ProcessesController::class, 'destroy'])->middleware('role:Administrator');
+    });
