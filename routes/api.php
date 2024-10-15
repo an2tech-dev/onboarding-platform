@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\TeamController;
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -36,4 +37,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/floors', [FloorController::class, 'store'])->middleware('role:Administrator|Manager');
     Route::put('/floors/{id}', [FloorController::class, 'update'])->middleware('role:Administrator|Manager');
     Route::delete('/floors/{id}', [FloorController::class, 'destroy'])->middleware('role:Administrator');
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/teams', [TeamController::class, 'index']) ->middleware('role:Administrator|Manager');
+    Route::post('/teams', [TeamController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/teams/{id}', [TeamController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/teams/{id}', [TeamController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });
