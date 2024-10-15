@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CompanyResource\Pages;
@@ -38,18 +39,31 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('team_members')->label('Team Members'),
                 Tables\Columns\TextColumn::make('office_size')->label('Office Size'),
             ])
-            ->filters([
-            ]);
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation() 
+                    ->action(function (Company $record) {
+                        if (auth()->user()->hasRole('Administrator') || 
+                            (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->id)) {
+                            $record->delete();
+                        } else {
+                            throw new \Exception("You do not have permission to delete this company.");
+                        }
+                    }),
+            ])
+            ->filters([]);
     }
 
     public static function getPages(): array
-{
-    return [
-        'index' => Pages\ListCompanies::route('/'),
-        'create' => Pages\CreateCompany::route('/create'),
-        'edit' => Pages\EditCompany::route('/{record}/edit'),
-    ];
-}
+    {
+        return [
+            'index' => Pages\ListCompanies::route('/'),
+            'create' => Pages\CreateCompany::route('/create'),
+            'edit' => Pages\EditCompany::route('/{record}/edit'),
+        ];
+    }
+
     public static function canViewAny(): bool
     {
         return auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Manager');

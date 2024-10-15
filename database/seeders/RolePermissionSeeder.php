@@ -11,24 +11,22 @@ class RolePermissionSeeder extends Seeder
     public function run()
     {
         // Company Permissions
-        Permission::create(['name' => 'create company']);
-        Permission::create(['name' => 'view company']);
-        Permission::create(['name' => 'update company']);
-        Permission::create(['name' => 'delete company']);
-
+        Permission::firstOrCreate(['name' => 'create company']);
+        Permission::firstOrCreate(['name' => 'view company']);
+        Permission::firstOrCreate(['name' => 'update company']);
+        Permission::firstOrCreate(['name' => 'delete company']);
+    
         // Product Permissions
-        Permission::create(['name' => 'create product']);
-        Permission::create(['name' => 'view product']);
-        Permission::create(['name' => 'update product']);
-        Permission::create(['name' => 'delete product']);
-
+        Permission::firstOrCreate(['name' => 'create product']);
+        Permission::firstOrCreate(['name' => 'view product']);
+        Permission::firstOrCreate(['name' => 'update product']);
+        Permission::firstOrCreate(['name' => 'delete product']);
+    
         // Roles
-        Role::create(['name' => 'Administrator']);
-        Role::create(['name' => 'Manager']);
-        Role::create(['name' => 'Employee']);
-
-        // Assign Permissions to Administrator
-        $admin = Role::findByName('Administrator');
+        $admin = Role::firstOrCreate(['name' => 'Administrator']);
+        $manager = Role::firstOrCreate(['name' => 'Manager']);
+        $employee = Role::firstOrCreate(['name' => 'Employee']);
+    
         $admin->givePermissionTo([
             'create company',
             'view company',
@@ -39,14 +37,14 @@ class RolePermissionSeeder extends Seeder
             'update product',
             'delete product',
         ]);
-
-        // Assign Permissions to Manager (limited to viewing and updating companies/products)
-        $manager = Role::findByName('Manager');
+    
         $manager->givePermissionTo([
             'view company',
             'update company',
+            'create product',
             'view product',
             'update product',
+            'delete product',
         ]);
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->date('release_date');
-            $table->string('product_image');
+            $table->string('product_image')->nullable(); 
             $table->timestamps();
         });
     }

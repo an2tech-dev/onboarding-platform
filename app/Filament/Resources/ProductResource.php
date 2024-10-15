@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Filament\Forms;
-use Filament\Tables;
-use Filament\Resources\Resource;
 use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -18,21 +19,20 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Select::make('company_id')
                     ->relationship('company', 'name')
-                    ->required(),
+                    ->required()
+                    ->hidden(), 
                 TextInput::make('name')->required(),
                 Textarea::make('description')->required(),
                 DatePicker::make('release_date')->required(),
                 FileUpload::make('product_image')->image()->required(),
             ]);
     }
-
     public static function table(Table $table): Table
     {
         return $table
@@ -43,8 +43,12 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('release_date'),
                 Tables\Columns\ImageColumn::make('product_image'),
             ])
-            ->filters([
-            ]);
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation(), 
+            ])
+            ->filters([]);
     }
 
     public static function getPages(): array
@@ -54,5 +58,10 @@ class ProductResource extends Resource
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Manager');
     }
 }

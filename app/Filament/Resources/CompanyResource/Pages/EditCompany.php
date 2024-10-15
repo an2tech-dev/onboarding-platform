@@ -11,7 +11,9 @@ class EditCompany extends EditRecord
 
     protected function canEdit($record): bool
     {
-        return auth()->user()->hasRole('Administrator') || 
-               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->id);
+        if (auth()->user()->hasRole('Administrator')) {
+            return true;
+        }
+        return auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->id;
     }
 }
