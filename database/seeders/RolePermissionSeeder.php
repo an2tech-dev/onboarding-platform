@@ -21,12 +21,20 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'view product']);
         Permission::firstOrCreate(['name' => 'update product']);
         Permission::firstOrCreate(['name' => 'delete product']);
+
+        // Floor Permissions
+        Permission::firstOrCreate(['name' => 'create floor']);
+        Permission::firstOrCreate(['name' => 'view floor']);
+        Permission::firstOrCreate(['name' => 'update floor']);
+        Permission::firstOrCreate(['name' => 'delete floor']);
     
         // Roles
         $admin = Role::firstOrCreate(['name' => 'Administrator']);
         $manager = Role::firstOrCreate(['name' => 'Manager']);
         $employee = Role::firstOrCreate(['name' => 'Employee']);
-    
+
+
+        // Assign Permissions to Administrator
         $admin->givePermissionTo([
             'create company',
             'view company',
@@ -36,8 +44,13 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
+            'create floor',
+            'view floor',
+            'update floor',
+            'delete floor',
         ]);
-    
+
+        // Assign Permissions to Manager
         $manager->givePermissionTo([
             'view company',
             'update company',
@@ -45,6 +58,9 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
+            'create floor',
+            'view floor',
+            'update floor',
         ]);
     }
 }

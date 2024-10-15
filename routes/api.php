@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\FloorController;
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -27,4 +28,12 @@ Route::get('/products', [ProductController::class, 'index'])->middleware('role:A
 Route::post('/products', [ProductController::class, 'store'])->middleware('role:Administrator|Manager');
 Route::put('/products/{id}', [ProductController::class, 'update'])->middleware('role:Administrator|Manager');
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middleware('role:Administrator|Manager');
+});
+
+// Floor Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/floors', [FloorController::class, 'index'])->middleware('role:Administrator|Manager');
+    Route::post('/floors', [FloorController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/floors/{id}', [FloorController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/floors/{id}', [FloorController::class, 'destroy'])->middleware('role:Administrator');
 });
