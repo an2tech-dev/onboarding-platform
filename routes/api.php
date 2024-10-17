@@ -45,7 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/floors', [FloorController::class, 'index'])->middleware('role:Administrator|Manager');
     Route::post('/floors', [FloorController::class, 'store'])->middleware('role:Administrator|Manager');
     Route::put('/floors/{id}', [FloorController::class, 'update'])->middleware('role:Administrator|Manager');
-    Route::delete('/floors/{id}', [FloorController::class, 'destroy'])->middleware('role:Administrator');
+    Route::delete('/floors/{id}', [FloorController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use App\Models\Floor;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 
@@ -45,7 +46,7 @@ class TeamController extends Controller
         $data = $request->validated();
         $team = Team::findOrFail($id);
 
-        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->company_id)) {
+        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->id)) {
             return response()->json(['error' => 'Unauthorized to update this team'], 403);
         }
 
@@ -61,17 +62,22 @@ class TeamController extends Controller
     {
         $team = Team::findOrFail($id);
 
-        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->company_id)) {
+        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->id)) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $team->delete();
-        return response()->json(['message' => 'Team deleted successfully!'], 204);
+        try {
+            $team->delete();
+            return response()->json(['message' => 'Team deleted successfully!'], 204);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Team could not be deleted'], 500);
+        }
     }
 
     private function isValidCompany($floorId)
     {
         $floor = Floor::find($floorId);
-        return $floor && $floor->company_id === auth()->user()->company_id;
+        
+        return $floor && $floor->company_id == auth()->user()->company_id;
     }
 }
