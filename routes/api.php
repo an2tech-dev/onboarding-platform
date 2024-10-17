@@ -9,6 +9,7 @@ use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\ResourceController;
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -61,4 +62,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/schedules', [ScheduleController::class, 'store'])->middleware('role:Administrator|Manager');
     Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->middleware('role:Administrator|Manager');
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->middleware('role:Administrator|Manager');
+});
+
+// Resource Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/resources', [ResourceController::class, 'index'])->middleware('role:Administrator|Manager');
+    Route::post('/resources', [ResourceController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/resources/{id}', [ResourceController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/resources/{id}', [ResourceController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });
