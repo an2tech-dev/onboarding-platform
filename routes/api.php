@@ -1,4 +1,4 @@
-api.php <?php
+<?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -6,7 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProcessController;
-
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\TeamController;
 
@@ -53,4 +53,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/teams', [TeamController::class, 'store'])->middleware('role:Administrator|Manager');
     Route::put('/teams/{id}', [TeamController::class, 'update'])->middleware('role:Administrator|Manager');
     Route::delete('/teams/{id}', [TeamController::class, 'destroy'])->middleware('role:Administrator|Manager');
+});
+
+// Schedule Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/schedules', [ScheduleController::class, 'index'])->middleware('role:Administrator|Manager');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->middleware('role:Administrator|Manager');
 });

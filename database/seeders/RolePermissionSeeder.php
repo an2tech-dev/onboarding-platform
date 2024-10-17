@@ -39,6 +39,14 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'view team']);
         Permission::firstOrCreate(['name' => 'update team']);
         Permission::firstOrCreate(['name' => 'delete team']);
+
+
+        // Schedule Permissions
+        Permission::firstOrCreate(['name' => 'create schedule']);
+        Permission::firstOrCreate(['name' => 'view schedule']);
+        Permission::firstOrCreate(['name' => 'update schedule']);
+        Permission::firstOrCreate(['name' => 'delete schedule']);
+
     
         // Roles
         $admin = Role::firstOrCreate(['name' => 'Administrator']);
@@ -68,6 +76,11 @@ class RolePermissionSeeder extends Seeder
             'view team',
             'update team',
             'delete team',
+            'create schedule',
+            'view schedule',
+            'update schedule',
+            'delete schedule',
+
         ]);
 
         // Assign Permissions to Manager
@@ -87,6 +100,10 @@ class RolePermissionSeeder extends Seeder
             'create team',
             'update team',
             'view team',
+            'create schedule',
+            'view schedule',
+            'update schedule',
+            'delete schedule',
         ]);
     }
 }
