@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('processes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('company')->onDelete('cascade'); 
             $table->string('name');
             $table->text('description');
             $table->timestamps();
