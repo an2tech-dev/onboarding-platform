@@ -15,6 +15,7 @@ class StoreProcessRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'company_id' => 'required|exists:company,id', // Ensure that the process belongs to a valid company
         ];
     }
 }

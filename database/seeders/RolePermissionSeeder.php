@@ -23,10 +23,10 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'delete product']);
 
         //Processes Permissions
-        Permission::firstOrCreate(['name' => 'create processes']);
-        Permission::firstOrCreate(['name' => 'view processes']);
-        Permission::firstOrCreate(['name' => 'update processes']);
-        Permission::firstOrCreate(['name' => 'delete processes']);
+        Permission::firstOrCreate(['name' => 'create process']);
+        Permission::firstOrCreate(['name' => 'view process']);
+        Permission::firstOrCreate(['name' => 'update process']);
+        Permission::firstOrCreate(['name' => 'delete process']);
         // Floor Permissions
         Permission::firstOrCreate(['name' => 'create floor']);
         Permission::firstOrCreate(['name' => 'view floor']);
@@ -56,10 +56,10 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
-            'create processes',
-            'view processes',
-            'update processes',
-            'delete processes',
+            'create process',
+            'view process',
+            'update process',
+            'delete process',
             'create floor',
             'view floor',
             'update floor',
@@ -78,9 +78,9 @@ class RolePermissionSeeder extends Seeder
             'view product',
             'update product',
             'delete product',
-            'create processes',
-            'view processes',
-            'update processes',
+            'create process',
+            'view process',
+            'update process',
             'create floor',
             'view floor',
             'update floor',

@@ -1,11 +1,11 @@
-<?php
+api.php <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProcessesController;
+use App\Http\Controllers\ProcessController;
 
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\TeamController;
@@ -35,10 +35,10 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy'])->middlewa
 
 // Processes Routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/processes', [ProcessesController::class, 'index'])->middleware('role:Administrator|Manager');
-    Route::post('/processes', [ProcessesController::class, 'store'])->middleware('role:Administrator|Manager');
-    Route::put('/processes/{id}', [ProcessesController::class, 'update'])->middleware('role:Administrator|Manager');
-    Route::delete('/processes/{id}', [ProcessesController::class, 'destroy'])->middleware('role:Administrator');
+    Route::get('/processes', [ProcessController::class, 'index'])->middleware('role:Administrator|Manager');
+    Route::post('/processes', [ProcessController::class, 'store'])->middleware('role:Administrator|Manager');
+    Route::put('/processes/{id}', [ProcessController::class, 'update'])->middleware('role:Administrator|Manager');
+    Route::delete('/processes/{id}', [ProcessController::class, 'destroy'])->middleware('role:Administrator|Manager');
     });
 // Floor Routes
 Route::middleware(['auth:sanctum'])->group(function () {

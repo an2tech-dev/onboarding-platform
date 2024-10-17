@@ -12,26 +12,22 @@ class UpdateProcessRequest extends FormRequest
         $process = Process::find($this->route('id'));
 
         if (!$process) {
-            return false;
+            return false; 
         }
 
         if (auth()->user()->hasRole('Administrator')) {
             return true;
         }
 
-        if (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $process->company_id) {
-            return true;
-        }
-
-        return false;
+        return auth()->user()->hasRole('Manager') && auth()->user()->company_id === $process->company_id;
     }
 
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
+            'company_id' => 'sometimes|required|exists:company,id',
         ];
     }
 }
-
