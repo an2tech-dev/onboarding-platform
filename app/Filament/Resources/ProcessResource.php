@@ -2,7 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Floor;
+use App\Models\Process;
+use App\Models\Company;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Resource;
@@ -10,17 +11,18 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
+use App\Filament\Resources\ProcessResource\Pages;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Filament\Resources\FloorResource\Pages;
 
-class FloorResource extends Resource
+class ProcessResource extends Resource
 {
-    protected static ?string $model = Floor::class;
+    protected static ?string $model = Process::class;
 
-    protected static ?string $navigationLabel = 'Floors';
-    protected static ?string $navigationIcon = 'heroicon-o-home'; 
+    protected static ?string $navigationLabel = 'Processes';
+    protected static ?string $navigationIcon = 'heroicon-o-cog'; 
 
     public static function canViewAny(): bool
     {
@@ -49,18 +51,10 @@ class FloorResource extends Resource
         return $form
             ->schema([
                 Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required()
-                    ->label('Company'),
-
-                TextInput::make('name')
-                    ->required()
-                    ->label('Floor Name'),
-
-                TextInput::make('floor_number')
-                    ->numeric()
-                    ->required()
-                    ->label('Floor Number'),
+                    ->relationship('company', 'name') 
+                    ->required(),
+                TextInput::make('name')->required(),
+                Textarea::make('description')->required(),
             ]);
     }
 
@@ -69,15 +63,9 @@ class FloorResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')->label('Company')->sortable(),
-                TextColumn::make('name')->label('Floor Name')->sortable(),
-                TextColumn::make('floor_number')->label('Floor Number')->sortable(),
-                // TextColumn::make('created_at')->label('Created At')->dateTime(),
-                // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                TextColumn::make('company.name')->label('Company Name')->sortable(),
+                TextColumn::make('name')->label('Process Name')->sortable(),
+                TextColumn::make('description'),
             ])
             ->filters([
             ]);
@@ -95,9 +83,9 @@ class FloorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFloors::route('/'),
-            'create' => Pages\CreateFloor::route('/create'),
-            'edit' => Pages\EditFloor::route('/{record}/edit'),
+            'index' => Pages\ListProcesses::route('/'),
+            'create' => Pages\CreateProcess::route('/create'),
+            'edit' => Pages\EditProcess::route('/{record}/edit'),
         ];
     }
 }
