@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\UserController; 
 use App\Http\Controllers\LoginController; 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProcessController;
@@ -70,4 +71,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/resources', [ResourceController::class, 'store'])->middleware('role:Administrator|Manager');
     Route::put('/resources/{id}', [ResourceController::class, 'update'])->middleware('role:Administrator|Manager');
     Route::delete('/resources/{id}', [ResourceController::class, 'destroy'])->middleware('role:Administrator|Manager');
+});
+
+    // User Routes
+    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->middleware('role:Administrator');
+    Route::post('/users', [UserController::class, 'store'])->middleware('role:Administrator');
+    Route::put('/users/{id}', [UserController::class, 'update'])->middleware('role:Administrator');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('role:Administrator');
 });

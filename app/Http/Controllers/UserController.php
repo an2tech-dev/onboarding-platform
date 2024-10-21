@@ -5,16 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index()
     {
+        if (!Auth::user()->hasRole('Administrator')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         return response()->json(User::all());
     }
 
     public function store(Request $request)
     {
+        if (!Auth::user()->hasRole('Administrator')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -29,6 +38,10 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!Auth::user()->hasRole('Administrator')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
@@ -47,6 +60,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        if (!Auth::user()->hasRole('Administrator')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $user = User::findOrFail($id);
         $user->delete();
         return response()->json(null, 204);
