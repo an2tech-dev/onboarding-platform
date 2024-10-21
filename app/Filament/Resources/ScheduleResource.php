@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\Schedule;
+use App\Models\Process;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Resource;
@@ -20,22 +21,37 @@ class ScheduleResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('process_id')
-                    ->relationship('process', 'name')
-                    ->required()
-                    ->label('Process'),
-                Forms\Components\TextInput::make('schedule_type')
-                    ->required()
-                    ->label('Schedule Type'),
-                Forms\Components\TextInput::make('start_time')
-                    ->required()
-                    ->label('Start Time'),
-                Forms\Components\TextInput::make('end_time')
-                    ->required()
-                    ->label('End Time'),
-            ]);
+        $schema = [];
+
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Forms\Components\Select::make('process_id')
+                ->relationship('process', 'name')
+                ->required()
+                ->label('Process');
+        } else {
+            $schema[] = Forms\Components\Select::make('process_id')
+                ->options(
+                    Process::where('company_id', auth()->user()->company_id)
+                        ->pluck('name', 'id') 
+                )
+                ->required()
+                ->label('Process');
+        }
+
+        // Add the schedule fields after the process selection
+        $schema[] = Forms\Components\TextInput::make('schedule_type')
+            ->required()
+            ->label('Schedule Type');
+
+        $schema[] = Forms\Components\TextInput::make('start_time')
+            ->required()
+            ->label('Start Time');
+
+        $schema[] = Forms\Components\TextInput::make('end_time')
+            ->required()
+            ->label('End Time');
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table
@@ -46,7 +62,7 @@ class ScheduleResource extends Resource
                 Tables\Columns\TextColumn::make('schedule_type')->label('Schedule Type'),
                 Tables\Columns\TextColumn::make('start_time')->label('Start Time'),
                 Tables\Columns\TextColumn::make('end_time')->label('End Time'),
-                Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
+                // Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

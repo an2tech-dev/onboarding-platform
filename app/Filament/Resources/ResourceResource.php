@@ -20,26 +20,41 @@ class ResourceResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('company_id')
-                    ->relationship('company', 'name') 
-                    ->required()
-                    ->label('Company'),
-                Forms\Components\TextInput::make('categories')
-                    ->required()
-                    ->label('Categories'),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->label('Title'),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->label('Description'),
-                Forms\Components\TextInput::make('url')
-                    ->url()
-                    ->required()
-                    ->label('Resource URL'),
-            ]);
+        $schema = [];
+
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Forms\Components\Select::make('company_id')
+                ->relationship('company', 'name')
+                ->required()
+                ->label('Company');
+        } else {
+            $schema[] = Forms\Components\Select::make('company_id')
+                ->options([
+                    auth()->user()->company_id => auth()->user()->company->name 
+                ])
+                ->required()
+                ->label('Company')
+                ->default(auth()->user()->company_id); 
+        }
+
+        $schema[] = Forms\Components\TextInput::make('categories')
+            ->required()
+            ->label('Categories');
+
+        $schema[] = Forms\Components\TextInput::make('title')
+            ->required()
+            ->label('Title');
+
+        $schema[] = Forms\Components\Textarea::make('description')
+            ->required()
+            ->label('Description');
+
+        $schema[] = Forms\Components\TextInput::make('url')
+            ->url()
+            ->required()
+            ->label('Resource URL');
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table
@@ -51,7 +66,7 @@ class ResourceResource extends Resource
                 Tables\Columns\TextColumn::make('title')->label('Title'),
                 Tables\Columns\TextColumn::make('description')->label('Description'),
                 Tables\Columns\TextColumn::make('url')->label('Resource URL'),
-                Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
+                // Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

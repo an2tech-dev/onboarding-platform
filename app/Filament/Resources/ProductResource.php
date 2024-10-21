@@ -50,31 +50,42 @@ class ProductResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required()
-                    ->label('Company'),
+        $schema = [];
 
-                TextInput::make('name')
-                    ->required()
-                    ->label('Product Name'),
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Select::make('company_id')
+                ->relationship('company', 'name')
+                ->required()
+                ->label('Company');
+        } else {
+            $schema[] = Select::make('company_id')
+                ->options([
+                    auth()->user()->company_id => auth()->user()->company->name 
+                ])
+                ->required()
+                ->label('Company')
+                ->default(auth()->user()->company_id); 
+        }
 
-                Textarea::make('description')
-                    ->label('Product Description')
-                    ->nullable(),
+        $schema[] = TextInput::make('name')
+            ->required()
+            ->label('Product Name');
 
-                DatePicker::make('release_date')
-                    ->label('Release Date')
-                    ->nullable()
-                    ->displayFormat('Y-m-d'),
+        $schema[] = Textarea::make('description')
+            ->label('Product Description')
+            ->nullable();
 
-                FileUpload::make('product_image')
-                    ->label('Product Image')
-                    ->image()
-                    ->nullable(),
-            ]);
+        $schema[] = DatePicker::make('release_date')
+            ->label('Release Date')
+            ->nullable()
+            ->displayFormat('Y-m-d');
+
+        $schema[] = FileUpload::make('product_image')
+            ->label('Product Image')
+            ->image()
+            ->nullable();
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table
@@ -111,7 +122,7 @@ class ProductResource extends Resource
     {
         return [
             'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
+            'create' => Pages\CreateProduct::route('/create'), 
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }

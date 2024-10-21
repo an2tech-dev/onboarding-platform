@@ -46,22 +46,33 @@ class FloorResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required()
-                    ->label('Company'),
+        $schema = [];
 
-                TextInput::make('name')
-                    ->required()
-                    ->label('Floor Name'),
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Select::make('company_id')
+                ->relationship('company', 'name')
+                ->required()
+                ->label('Company');
+        } else {
+            $schema[] = Select::make('company_id')
+                ->options([
+                    auth()->user()->company_id => auth()->user()->company->name 
+                ])
+                ->required()
+                ->label('Company')
+                ->default(auth()->user()->company_id); 
+        }
 
-                TextInput::make('floor_number')
-                    ->numeric()
-                    ->required()
-                    ->label('Floor Number'),
-            ]);
+        $schema[] = TextInput::make('name')
+            ->required()
+            ->label('Floor Name');
+
+        $schema[] = TextInput::make('floor_number')
+            ->numeric()
+            ->required()
+            ->label('Floor Number');
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table

@@ -48,14 +48,32 @@ class ProcessResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Select::make('company_id')
-                    ->relationship('company', 'name') 
-                    ->required(),
-                TextInput::make('name')->required(),
-                Textarea::make('description')->required(),
-            ]);
+        $schema = [];
+
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Select::make('company_id')
+                ->relationship('company', 'name') 
+                ->required()
+                ->label('Company');
+        } else {
+            $schema[] = Select::make('company_id')
+                ->options([
+                    auth()->user()->company_id => auth()->user()->company->name 
+                ])
+                ->required()
+                ->label('Company')
+                ->default(auth()->user()->company_id); 
+        }
+
+        $schema[] = TextInput::make('name')
+            ->required()
+            ->label('Process Name');
+
+        $schema[] = Textarea::make('description')
+            ->required()
+            ->label('Description');
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table

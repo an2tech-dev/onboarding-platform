@@ -47,22 +47,30 @@ class TeamResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Select::make('floor_id')
-                    ->relationship('floor', 'name')
-                    ->required()
-                    ->label('Floor'),
+        $schema = [];
 
-                TextInput::make('name')
-                    ->required()
-                    ->label('Team Name'),
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Select::make('floor_id')
+                ->relationship('floor', 'name')
+                ->required()
+                ->label('Floor');
+        } else {
+            $schema[] = Select::make('floor_id')
+                ->options(Floor::where('company_id', auth()->user()->company_id)->pluck('name', 'id')) 
+                ->required()
+                ->label('Floor');
+        }
 
-                TextInput::make('members_count')
-                    ->numeric()
-                    ->required()
-                    ->label('Number of Members'),
-            ]);
+        $schema[] = TextInput::make('name')
+            ->required()
+            ->label('Team Name');
+
+        $schema[] = TextInput::make('members_count')
+            ->numeric()
+            ->required()
+            ->label('Number of Members');
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table
@@ -73,8 +81,8 @@ class TeamResource extends Resource
                 TextColumn::make('floor.name')->label('Floor')->sortable(),
                 TextColumn::make('name')->label('Team Name')->sortable(),
                 TextColumn::make('members_count')->label('Members Count')->sortable(),
-                TextColumn::make('created_at')->label('Created At')->dateTime(),
-                TextColumn::make('updated_at')->label('Updated At')->dateTime(),
+                // TextColumn::make('created_at')->label('Created At')->dateTime(),
+                // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
