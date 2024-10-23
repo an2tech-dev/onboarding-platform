@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@heroicons/react": "^2.1.5",
-        "@inertiajs/inertia-vue3": "^0.6.0"
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "vue-router": "^4.4.5"
     }
 }
