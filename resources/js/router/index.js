@@ -1,18 +1,23 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../components/Login.vue';
-import DataComponent from '../components/DataComponent.vue';
-import Welcome from '../components/Welcome.vue';
+import Home from '../components/Home.vue';
+import Processes from '../components/Processes.vue';
+import Resources from '../components/Resources.vue';
+import Floor1 from '../components/Floor1.vue';
+import Floor2 from '../components/Floor2.vue';
 
 const routes = [
-    { path: '/login', component: Login },
-    { path: '/data', component: DataComponent },
-    { path: '/welcome', component: Welcome }, 
-    { path: '/', redirect: '/login' },
+  { path: '/home', component: Home },
+  { path: '/processes', component: Processes },
+  { path: '/resources', component: Resources },
+  { path: '/teams/floor1', component: Floor1 },
+  { path: '/teams/floor2', component: Floor2 },
+  { path: '/', redirect: '/home' },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;
