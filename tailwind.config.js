@@ -17,7 +17,10 @@ export default {
             
             },
             colors: {
-                customGray: '#E6E1E9',},
+                primary: '#E7DEF8',
+                darkText: '#1F1048',
+                lightPurple: '#F4F1FA',
+            },
         },
     },
 

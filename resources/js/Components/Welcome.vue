@@ -1,15 +1,15 @@
 <template>
   <div class="flex justify-center mt-5">
-    <div class="flex items-center gap-2.5 w-[1128px] h-[194px] p-4 bg-white shadow-lg rounded-[28px_28px_30px_30px] opacity-100">
-      <div class="flex items-center justify-center w-16 h-16 rounded-[16px] bg-[#E7DEF8]">
+    <div class="flex items-center gap-[10px] w-[1120px] h-[180px] p-[24px] bg-white border border-[#E7DEF8] rounded-[24px] shadow-lg-custom">
+      <div class="flex items-center justify-center w-[80px] h-[80px] rounded-[16px] bg-[#E7DEF8]">
         <img
-          src="Frame1.png"
+          src="./Frame.png"
           alt="Welcome Icon"
-          class="w-16 h-16"
+          class="w-12 h-12"
         />
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl font-normal leading-10 text-[#1F1048] m-0">
+        <h1 class="text-2xl font-semibold text-[#1F1048] m-0">
           Welcome to StarLabs team
         </h1>
         <p class="text-base leading-6 text-[#1F1048] mt-2 tracking-wide">
@@ -27,55 +27,7 @@ export default {
 </script>
 
 <style scoped>
-/* Scoped style for additional customization, if needed */
-</style>
-
-
-<style scoped>
-/* Main container to provide top margin for spacing below the navbar */
-.page-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px; /* Adjust this value for spacing below the navbar */
-}
-
-.welcome-banner {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  width: 1072px;
-  padding: 20px;
-  border-radius: 16px;
-  background-color: #FFFFFF;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  padding: 2px 0;
-  border-radius: 16px;
-  background-color: #E7DEF8;
-}
-
-.welcome-text h1 {
-  font-family: Roboto, sans-serif;
-  font-size: 32px;
-  font-weight: 400;
-  line-height: 40px;
-  color: #1F1048;
-  margin: 0;
-}
-
-.welcome-text p {
-  font-family: Roboto, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.5px;
-  color: #1F1048;
-  margin-top: 10px;
+.shadow-lg-custom {
+  box-shadow: 0px 4px 20px rgba(31, 16, 72, 0.05);
 }
 </style>
