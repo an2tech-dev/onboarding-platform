@@ -12,7 +12,7 @@
           />
         </div>
         <div class="flex flex-col">
-          <h1 class="text-2xl font-semibold text-[#1F1048] m-0">
+          <h1 class="text-2xl  text-[#1F1048] m-0">
             Welcome to StarLabs team
           </h1>
           <p class="text-base leading-6 text-[#1F1048] mt-2 tracking-wide">
@@ -31,6 +31,11 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
 .shadow-container {
   width: 1128px;
   height: 194px;
@@ -43,4 +48,6 @@ export default {
 .shadow-lg-custom {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
 }
+
+
 </style>
