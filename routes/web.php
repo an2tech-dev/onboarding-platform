@@ -35,3 +35,7 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
+
+Route::get('/{any}', function () {
+    return view('index'); 
+})->where('any', '.*');
