@@ -1,41 +1,26 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
+// Simple root route for confirmation
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => phpversion(),  
-    ]);
+    return response()->json(['message' => 'Welcome to the Laravel Backend API']);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// Authenticated profile routes (API-only, without views)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/example', function () {
-    return Inertia::render('ExampleComponent');
-});
-
+// Include auth routes (login, register, etc.)
 require __DIR__.'/auth.php';
 
+// Custom logout route
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('/');
+    return response()->json(['message' => 'Logged out successfully']);
 })->name('logout');
-
-Route::get('/{any}', function () {
-    return view('index'); 
-})->where('any', '.*');
