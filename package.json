@@ -6,21 +6,16 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
-        "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.20",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.5",
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.14",
-        "vite": "^5.4.8",
-        "vue": "^3.4.0"
+        "vite": "^5.4.8"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.6.0",
-        "@heroicons/react": "^2.1.5",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "vue-router": "^4.0.13"
+        "@heroicons/react": "^2.1.5"
     }
 }

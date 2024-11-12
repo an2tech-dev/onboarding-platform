@@ -3,20 +3,19 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return view('welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => phpversion(),  
+        'phpVersion' => phpversion(),
     ]);
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -26,7 +25,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/example', function () {
-    return Inertia::render('ExampleComponent');
+    return view('example');
 });
 
 require __DIR__.'/auth.php';
@@ -36,6 +35,7 @@ Route::post('/logout', function () {
     return redirect('/');
 })->name('logout');
 
+// Catch-all route for any other paths, redirect to a Blade view
 Route::get('/{any}', function () {
-    return view('index'); 
+    return view('index');
 })->where('any', '.*');
