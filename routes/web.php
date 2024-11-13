@@ -14,9 +14,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,7 +35,6 @@ Route::post('/logout', function () {
     return redirect('/');
 })->name('logout');
 
-// Catch-all route for any other paths, redirect to a Blade view
 Route::get('/{any}', function () {
-    return view('index');
+    return view('app'); 
 })->where('any', '.*');
