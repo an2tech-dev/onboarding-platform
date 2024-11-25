@@ -1,6 +1,6 @@
 <template>
-  <nav class="bg-white rounded-xl shadow p-4 space-y-2 mt-6 ml-4 w-full">
-    <ul>
+  <nav class="bg-white rounded-xl shadow p-4 space-y-4 mt-6 ml-4 w-64 h-auto">
+    <ul class="space-y-2">
       <li v-for="item in menuItems" :key="item.name">
         <router-link 
           :to="item.route" 
@@ -39,4 +39,24 @@ const isActive = (routeName) => {
 </script>
 
 <style scoped>
+nav {
+  width: 264px;
+  min-height: 340px; 
+  border-radius: 16px; 
+  padding: 16px; 
+}
+
+.router-link-active {
+  background-color: #E7DEF8; 
+  color: #000000; 
+}
+
+a:hover {
+  background-color: #E7DEF8; 
+  color: #000000; 
+}
+
+ul {
+  gap: 10px;
+}
 </style>
