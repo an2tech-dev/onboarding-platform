@@ -6,7 +6,11 @@ export default {
     './resources/css/**/*.css',        
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"Roboto"', 'sans-serif'], 
+      },
+    },
   },
   plugins: [],
 };

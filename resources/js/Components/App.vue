@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F4F1FA] min-h-screen p-4">
+  <div class="bg-[#F4EFFC] min-h-screen p-4">
     <div class="p-4 mb-4">
       <Welcome />
     </div>
@@ -13,6 +13,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import NavigationBar from './NavigationBar.vue';
