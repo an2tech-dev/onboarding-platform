@@ -3,12 +3,12 @@ import axios from 'axios';
 class ApiService {
   constructor() {
     this.apiClient = axios.create({
-      baseURL: 'http://onboarding-platform.test/api', 
+      baseURL: import.meta.env.VITE_API_URL || 'http://localhost/api', // Use VITE_API_URL from .env
       headers: {
         'Content-Type': 'application/json',
       },
     });
-  }
+  };
 
   getAuthToken() {
     return localStorage.getItem('token'); 
@@ -21,52 +21,36 @@ class ApiService {
     }
   }
 
-  // POST method
   post(endpoint, data) {
     this.setAuthHeader(); 
-    return this.apiClient
-      .post(endpoint, data)
-      .then(response => response.data)
-      .catch(error => {
-        console.error('Error posting data:', error);
-        throw error;
-      });
+    return this.apiClient.post(endpoint, data).then(response => response.data).catch(error => {
+      console.error('Error posting data:', error);
+      throw error;
+    });
   }
 
-  // GET method
   get(endpoint) {
     this.setAuthHeader(); 
-    return this.apiClient
-      .get(endpoint)
-      .then(response => response.data)
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        throw error;
-      });
+    return this.apiClient.get(endpoint).then(response => response.data).catch(error => {
+      console.error('Error fetching data:', error);
+      throw error;
+    });
   }
 
-  // PUT method
   put(endpoint, data) {
     this.setAuthHeader();
-    return this.apiClient
-      .put(endpoint, data)
-      .then(response => response.data)
-      .catch(error => {
-        console.error('Error updating data:', error);
-        throw error;
-      });
+    return this.apiClient.put(endpoint, data).then(response => response.data).catch(error => {
+      console.error('Error updating data:', error);
+      throw error;
+    });
   }
 
-  // DELETE method
   delete(endpoint) {
     this.setAuthHeader();
-    return this.apiClient
-      .delete(endpoint)
-      .then(response => response.data)
-      .catch(error => {
-        console.error('Error deleting data:', error);
-        throw error;
-      });
+    return this.apiClient.delete(endpoint).then(response => response.data).catch(error => {
+      console.error('Error deleting data:', error);
+      throw error;
+    });
   }
 }
 

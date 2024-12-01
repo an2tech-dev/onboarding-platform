@@ -53,7 +53,8 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await apiService.post('/login', {
+       console.log (import.meta.env.VITE_API_URL)
+        const response = await apiService.post('/api/login', {
           email: this.email,
           password: this.password
         });
