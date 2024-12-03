@@ -1,31 +1,33 @@
 <template>
-  <div class="bg-[#F4EFFC] min-h-screen p-4">
-    <div class="p-4 mb-4">
+  <div class="bg-[#F4EFFC] min-h-screen flex flex-col">
+    <div v-if="!isLoginPage" class="p-6 bg-[#F4EFFC] shadow-md">
       <Welcome />
     </div>
 
-    <div class="flex">
-      <NavigationBar v-if="!isLoginPage" class="w-64 flex-shrink-0" />
+    <div class="flex flex-1">
+      <NavigationBar v-if="!isLoginPage" class="w-64 flex-shrink-0 bg-white shadow-lg border-r h-full" />
 
-      <div :class="{'ml-[264px]': !isLoginPage}" class="flex-1 p-6">
+      <div class="flex-1 p-6">
         <router-view></router-view>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup>
 import NavigationBar from './NavigationBar.vue';
-import { useRoute } from 'vue-router'; 
+import Welcome from './Welcome.vue';
+import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 
 const route = useRoute();
-const isLoginPage = computed(() => {
-  return route.path === '/login'; 
-});
+
+const isLoginPage = computed(() => route.path === '/login');
 </script>
 
-<style>
-/* Additional global styles if needed */
+<style scoped>
+body {
+  margin: 0;
+  padding: 0;
+}
 </style>
