@@ -9,7 +9,7 @@ class Benefit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'name' , 'description' , 'logo'];
+    protected $fillable = ['title', 'description', 'company_id'];
 
     public function company()
     {

@@ -9,15 +9,15 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['floor_id', 'name', 'members_count'];
+    protected $fillable = ['name', 'company_id'];
 
-    public function floor()
+    public function company()
     {
-        return $this->belongsTo(Floor::class);
+        return $this->belongsTo(Company::class);
     }
 
-    public function members()
+    public function users()
     {
-        return $this->hasMany(Member::class);
+        return $this->hasMany(User::class);
     }
 }

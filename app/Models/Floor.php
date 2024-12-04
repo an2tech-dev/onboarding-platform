@@ -16,8 +16,4 @@ class Floor extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function teams()
-    {
-        return $this->hasMany(Team::class);
-    }
 }

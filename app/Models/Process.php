@@ -11,16 +11,11 @@ class Process extends Model
 
     protected $fillable = ['company_id', 'name', 'description'];
 
-    // Each process belongs to a company
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    // Each process has many schedules
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
+
 }
 
