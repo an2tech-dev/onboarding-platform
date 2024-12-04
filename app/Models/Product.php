@@ -15,4 +15,8 @@ class Product extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function getImageAttribute()
+    {
+        return $this->product_image ? asset('storage/' . $this->product_image) : null;
+    }
 }
