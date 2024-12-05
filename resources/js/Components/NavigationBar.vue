@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white rounded-xl shadow p-4 space-y-4 mt-6 ml-4 w-64 h-auto">
+  <nav class="flex bg-white rounded-xl shadow p-4 space-y-4 mt-6 ml-4 w-64 h-auto">
     <ul class="space-y-2">
       <li v-for="item in menuItems" :key="item.name">
         <router-link 

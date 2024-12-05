@@ -1,26 +1,33 @@
 <template>
-  <div class="p-8 bg-[#F4EFFC] min-h-screen">
+ <div class="flex flex-1 bg-[#F4EFFC] min-h-screen">
     <div v-for="company in companies" :key="company.id" class="bg-white shadow-lg rounded-lg p-6 mb-8">
       <h2 class="text-2xl font-bold mb-4">Exploring our company</h2>
 
       <!-- Description -->
+      <h5 class="font-bold mb-4">Description</h5>
       <p class="text-gray-600 mb-6">{{ company.description }}</p>
 
       <!-- Company Details -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div>
-          <strong>Established:</strong> {{ company.established || 'N/A' }}
-        </div>
-        <div>
-          <strong>Team members:</strong> {{ company.team_members || 'N/A' }}
-        </div>
-        <div>
-          <strong>Office size:</strong> {{ company.office_size || 'N/A' }}
-        </div>
-        <div>
-          <strong>Floors:</strong> {{ company.floors || 'N/A' }}
-        </div>
-      </div>
+<div class="grid grid-cols-4 gap-4 mb-6">
+  <div class="flex flex-col items-start">
+    <strong class="text-gray-800">Established:</strong>
+    <span class="text-gray-600">{{ prettifyDate(company.established) || 'N/A' }}</span>
+  </div>
+  <div class="flex flex-col items-start">
+    <strong class="text-gray-800">Team members:</strong>
+    <span class="text-gray-600">{{ company.team_members || 'N/A' }}</span>
+  </div>
+  <div class="flex flex-col items-start">
+    <strong class="text-gray-800">Office size:</strong>
+    <span class="text-gray-600">{{ company.office_size || 'N/A' }}</span>
+  </div>
+  <div class="flex flex-col items-start">
+    <strong class="text-gray-800">Floors:</strong>
+    <span class="text-gray-600">{{ company.floors || 'N/A' }}</span>
+  </div>
+</div>
+
+
 
       <!-- Products Section -->
       <h3 class="text-xl font-bold mb-4">Our Products</h3>
@@ -74,6 +81,7 @@
     </div>
   </div>
 </div>
+
 </template>
 
 <script>
@@ -114,6 +122,20 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
+
+    // Method to format the date in the required format
+    prettifyDate(date) {
+      if (!date) return 'N/A'; // Handle missing or invalid date
+
+      try {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' }; // Format: 18 December, 2024
+        return new Date(date).toLocaleDateString(undefined, options).replace(",", ""); // Remove default comma
+      } catch (error) {
+        console.error("Invalid date format:", date, error);
+        return 'N/A'; // Fallback for invalid date
+      }
+    },
+
     viewProductDetails(product) {
       this.selectedProduct = product;
     },
@@ -135,5 +157,8 @@ export default {
 <style scoped>
 .modal {
   z-index: 50;
+}
+.flex-col strong {
+  margin-bottom: 4px; /* Space between label and value */
 }
 </style>
