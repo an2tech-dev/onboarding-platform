@@ -69,7 +69,7 @@
         <p class="text-gray-600 mb-6 text-center">{{ selectedProduct.description }}</p>
       </div>
       <div>
-        <strong>Released:</strong> {{ selectedProduct.release_date || 'N/A' }}
+        <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
       </div>
     </div>
   </div>
@@ -119,6 +119,11 @@ export default {
     },
     closeProductDetails() {
       this.selectedProduct = null;
+    },
+    formatReleaseDate(date) {
+      if (!date) return null;
+      const options = { year: 'numeric', month: 'long' }; 
+      return new Date(date).toLocaleDateString(undefined, options);
     },
   },
   async created() {

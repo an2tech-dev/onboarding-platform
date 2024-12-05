@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-[#F4EFFC] min-h-screen flex flex-col">
-    <div v-if="!isLoginPage" class="p-6 bg-[#F4EFFC] shadow-md">
+  <div class="bg-[#F4EFFC] flex flex-col">
+    <div v-if="!isLoginPage" class="p-6 bg-[#F4EFFC]">
       <Welcome />
     </div>
 
