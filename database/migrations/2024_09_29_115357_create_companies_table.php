@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('established');
             $table->integer('team_members');
             $table->integer('office_size');
+            $table->string('floors');
+            $table->string('benefits');
             $table->timestamps();
         });
     }

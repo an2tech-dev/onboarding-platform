@@ -71,6 +71,13 @@ class CompanyResource extends Resource
                     ->numeric()
                     ->minValue(1)
                     ->nullable(),
+
+                TextInput::make('floors')
+                    ->label('Floors')
+                    ->nullable(),
+                TextInput::make('benefits')
+                    ->label('Benefits')
+                    ->nullable(),
             ]);
     }
 
@@ -84,13 +91,12 @@ class CompanyResource extends Resource
                 TextColumn::make('established')->label('Established')->date(),
                 TextColumn::make('team_members')->label('Team Members')->sortable(),
                 TextColumn::make('office_size')->label('Office Size (sqft)')->sortable(),
-                // TextColumn::make('created_at')->label('Created At')->dateTime(),
-                // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
+                TextColumn::make('floors')->label('Floors')->limit(50), 
+                TextColumn::make('benefits')->label('Benefits')->limit(50), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            
             ]);
     }
 

@@ -10,7 +10,7 @@ class Company extends Model
     use HasFactory;
     protected $table = 'company'; 
 
-    protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size'];
+    protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size' ,'floors', 'benefits'];
 
     public function products()
     {
@@ -22,10 +22,6 @@ class Company extends Model
         return $this->hasMany(Floor::class);
     }
 
-    public function benefits()
-    {
-        return $this->hasMany(Benefit::class);
-    }
 
     public function users()
     {
