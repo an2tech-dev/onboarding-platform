@@ -123,16 +123,16 @@ export default {
       }
     },
 
-    // Method to format the date in the required format
+   
     prettifyDate(date) {
-      if (!date) return 'N/A'; // Handle missing or invalid date
+      if (!date) return 'N/A'; 
 
       try {
-        const options = { day: 'numeric', month: 'long', year: 'numeric' }; // Format: 18 December, 2024
-        return new Date(date).toLocaleDateString(undefined, options).replace(",", ""); // Remove default comma
+        const options = { day: 'numeric', month: 'long', year: 'numeric' }; 
+        return new Date(date).toLocaleDateString(undefined, options).replace(",", ""); 
       } catch (error) {
         console.error("Invalid date format:", date, error);
-        return 'N/A'; // Fallback for invalid date
+        return 'N/A'; 
       }
     },
 
@@ -159,6 +159,6 @@ export default {
   z-index: 50;
 }
 .flex-col strong {
-  margin-bottom: 4px; /* Space between label and value */
+  margin-bottom: 4px; 
 }
 </style>
