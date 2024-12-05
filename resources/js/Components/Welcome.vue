@@ -5,7 +5,7 @@
         <div class="flex items-center gap-[30px] w-full h-full p-[24px] bg-white border border-[#E7DEF8] rounded-[20px] shadow-lg-custom">
           <div class="flex items-center justify-center w-[132px] h-[132px] rounded-[16px] bg-[#E7DEF8] p-[34px] gap-[10px]">
             <img
-              src="./Frame.png"
+              src="../../css/images/Frame1.png"
               alt="Welcome Icon"
               class="w-16 h-16"
             />
