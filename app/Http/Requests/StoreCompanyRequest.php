@@ -19,6 +19,9 @@ class StoreCompanyRequest extends FormRequest
             'established' => 'required|date',
             'team_members' => 'required|integer',
             'office_size' => 'required|integer',
+            'floors' => 'nullable|string|max:255', 
+            'benefits' => 'nullable|string|max:255',
+
         ];
     }
 }

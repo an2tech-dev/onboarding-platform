@@ -1,13 +1,13 @@
 <template>
-  <div class="p-8 bg-[#F4EFFC] min-h-screen">
+  <div class="p-8 bg-[#F4EFFC]">
     <div v-for="company in companies" :key="company.id" class="flex justify-center mt-5">
       <div class="shadow-container flex items-center gap-[10px]">
         <div class="flex items-center gap-[30px] w-full h-full p-[24px] bg-white border border-[#E7DEF8] rounded-[20px] shadow-lg-custom">
           <div class="flex items-center justify-center w-[132px] h-[132px] rounded-[16px] bg-[#E7DEF8] p-[34px] gap-[10px]">
             <img
-              src="./Frame.png"
+              src="../../css/images/Frame1.png"
               alt="Welcome Icon"
-              class="w-16 h-16"
+              class="w-[48px] h-[48px]"
             />
           </div>
           <div class="flex flex-col">

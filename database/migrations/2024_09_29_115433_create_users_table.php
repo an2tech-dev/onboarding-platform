@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('company_id')->nullable()->constrained('company')->onDelete('set null');
+            $table->foreignId('team_id')->nullable()->constrained('teams')->onDelete('set null');
             $table->timestamps();
         });
 

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('floor_id')->constrained('floors')->onDelete('cascade');
             $table->string('name');
-            $table->integer('members_count');
+            $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
             $table->timestamps();
         });
     }

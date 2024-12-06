@@ -11,8 +11,17 @@ class Product extends Model
 
     protected $fillable = ['company_id', 'name', 'description', 'release_date', 'product_image'];
 
+    protected $appends = ['image']; 
+
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function getImageAttribute()
+    {
+        return $this->product_image ? asset('storage/' . $this->product_image) : null;
+    }
+
+   
 }

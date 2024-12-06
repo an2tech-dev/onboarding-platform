@@ -9,12 +9,15 @@ class Schedule extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['process_id', 'schedule_type', 'start_time', 'end_time'];
+    protected $fillable = ['company_id', 'schedule_type', 'start_time', 'end_time','title', 'description'];
 
-    // Each schedule belongs to a process
     public function process()
     {
         return $this->belongsTo(Process::class);
+    }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
 

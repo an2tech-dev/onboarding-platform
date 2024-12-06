@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
     use HasFactory;
+    protected $table = 'company'; 
 
-    protected $table = 'company';
-
-    protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size'];
+    protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size' ,'floors', 'benefits'];
 
     public function products()
     {
@@ -22,12 +21,30 @@ class Company extends Model
     {
         return $this->hasMany(Floor::class);
     }
-    public function benefits()
-    {
-        return $this->hasMany(Benefit::class);
-    }
+
+
     public function users()
     {
         return $this->hasMany(User::class);
     }
+
+    public function stakeholders()
+    {
+        return $this->hasMany(Stakeholder::class);
+    }
+    public function processes()
+    {
+        return $this->hasMany(Process::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+   
+    public function resources()
+    {
+        return $this->hasMany(Resource::class);
+    }
+
 }
