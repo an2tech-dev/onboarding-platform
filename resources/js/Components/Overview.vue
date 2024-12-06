@@ -27,28 +27,42 @@
   </div>
 </div>
 
-    <!-- Product Details --> 
-    <h3 class="text-xl font-bold mb-4">Our Products</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<!-- Product Details -->
+<h3 class="text-xl font-bold mb-4">Our Products</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
   <div
     v-for="product in products"
     :key="product.id"
     @click="viewProductDetails(product)"
-    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow hover:bg-[#E8E2FA] transition"
+    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow-lg hover:bg-[#E8E2FA] transition"
   >
-    <div class="flex items-center gap-8 opacity-100">
-      <!-- Image container div with specific styles -->
-      <div class="flex-none" style="width: 154px; height: 120px; padding: 43px 21px; gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
-        <img :src="product.image" alt="Product Image" class="w-full h-full object-contain" />
+    <div class="flex items-center">
+      <div
+        class="flex-none"
+        style="
+          width: 154px; 
+          height: 120px; 
+          padding: 43px 21px; 
+          gap: 10px; 
+          border-radius: 6px 0px 0px 0px; 
+          background-color: white; 
+          opacity: 1;
+        "
+      >
+        <img 
+          :src="product.image" 
+          alt="Product Image" 
+          class="w-full h-full object-contain" 
+        />
       </div>
-      <!-- Text container -->
-      <div class="flex-1" style="max-width: 396px; height: 136px; opacity: 1;">
+      <div class="ml-4">
         <h4 class="font-bold text-lg mb-2">{{ product.name }}</h4>
         <p class="text-gray-600">{{ product.description }}</p>
       </div>
     </div>
   </div>
 </div>
+
 
 
       <!-- Benefits Section -->
@@ -74,13 +88,18 @@
         <img
           :src="selectedProduct.image"
           alt="Product Image"
-          class="w- h-40 object-contain mb-4 border border-[#CAC4CF]"
+          class="w-[407px] h-[218px] object-contain mb-4 border border-[#CAC4CF] gap-[10px] p-[81px]"
         />
-        <h2>{{ selectedProduct.name }}</h2>
-        
-        <p>{{ selectedProduct.description }}</p>
         <div>
+        <h2 class="w-[171px] h-[32px] font-bold text-xl mb-4">{{ selectedProduct.name }}</h2>
+        </div>
+        <div class="w-[407px] h-[128px] gap-[8px]"> 
+        <p class="w-[73px] h-[20px] text-sm mb-2 font-bold">Description</p>
+        <p class="w-[350px] h-[100px] text-sm">{{ selectedProduct.description }}</p>
+         </div>
+         <div class="w-[195px] h-[48px] gap-[16px] flex flex-col items-start"> 
           <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
+        </div>
         </div>
       </div>
     </div>
@@ -90,7 +109,7 @@
       @click="closeProductDetails"
     ></div>
   </div>
-</div>
+
 
 </template>
 
@@ -205,10 +224,17 @@ export default {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  width: 44px;
+  height: 44px;
+  top: 16px;
+  left: 925px;
+  padding: 14px;
+  position: absolute;
 }
 
 .modal-content {
   padding: 20px;
+  
 }
 
 .modal-overlay {
