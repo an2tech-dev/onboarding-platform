@@ -27,28 +27,42 @@
   </div>
 </div>
 
-    <!-- Product Details --> 
-    <h3 class="text-xl font-bold mb-4">Our Products</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<!-- Product Details -->
+<h3 class="text-xl font-bold mb-4">Our Products</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
   <div
     v-for="product in products"
     :key="product.id"
     @click="viewProductDetails(product)"
-    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow hover:bg-[#E8E2FA] transition"
+    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow-lg hover:bg-[#E8E2FA] transition"
   >
-    <div class="flex items-center gap-8 opacity-100">
-      <!-- Image container div with specific styles -->
-      <div class="flex-none" style="width: 154px; height: 120px; padding: 43px 21px; gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
-        <img :src="product.image" alt="Product Image" class="w-full h-full object-contain" />
+    <div class="flex items-center">
+      <div
+        class="flex-none"
+        style="
+          width: 154px; 
+          height: 120px; 
+          padding: 43px 21px; 
+          gap: 10px; 
+          border-radius: 6px 0px 0px 0px; 
+          background-color: white; 
+          opacity: 1;
+        "
+      >
+        <img 
+          :src="product.image" 
+          alt="Product Image" 
+          class="w-full h-full object-contain" 
+        />
       </div>
-      <!-- Text container -->
-      <div class="flex-1" style="max-width: 396px; height: 136px; opacity: 1;">
+      <div class="ml-4">
         <h4 class="font-bold text-lg mb-2">{{ product.name }}</h4>
         <p class="text-gray-600">{{ product.description }}</p>
       </div>
     </div>
   </div>
 </div>
+
 
 
       <!-- Benefits Section -->
