@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('team_members');
             $table->integer('office_size');
             $table->string('floors');
-            $table->string('benefits');
+            $table->json('benefits')->nullable();
             $table->timestamps();
         });
     }

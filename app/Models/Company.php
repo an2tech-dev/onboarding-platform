@@ -12,6 +12,11 @@ class Company extends Model
 
     protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size' ,'floors', 'benefits'];
 
+    protected $casts = [
+        'established' => 'date',
+        'benefits' => 'array',
+    ];
+
     public function products()
     {
         return $this->hasMany(Product::class);

@@ -1,11 +1,11 @@
 <template>
   <div class="bg-[#F4EFFC] flex flex-col">
-    <div v-if="!isLoginPage" class="p-6 bg-[#F4EFFC]">
+    <div v-if="!isLoginPage" class="container mx-auto p-6 bg-[#F4EFFC]">
       <Welcome />
     </div>
 
-    <div class="flex flex-1">
-      <NavigationBar v-if="!isLoginPage" class="w-64 flex-shrink-0 bg-white shadow-lg border-r h-full" />
+    <div class="flex flex-1 container mx-auto">
+      <NavigationBar v-if="!isLoginPage" />
 
       <div class="flex-1 p-6">
         <router-view></router-view>
