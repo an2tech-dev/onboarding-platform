@@ -7,7 +7,7 @@
             <img
               src="../../css/images/Frame1.png"
               alt="Welcome Icon"
-              class="w-16 h-16"
+              class="w-[48px] h-[48px]"
             />
           </div>
           <div class="flex flex-col">

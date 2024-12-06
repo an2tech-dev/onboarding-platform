@@ -27,22 +27,29 @@
   </div>
 </div>
 
-
-
-      <!-- Products Section -->
-      <h3 class="text-xl font-bold mb-4">Our Products</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div
-          v-for="product in products"
-          :key="product.id"
-          @click="viewProductDetails(product)"
-          class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow hover:bg-[#E8E2FA] transition"
-        >
-          <img :src="product.image" alt="Product Image" class="w-full h-32 object-contain mb-4" />
-          <h4 class="font-bold text-lg mb-2">{{ product.name }}</h4>
-          <p class="text-gray-600">{{ product.description }}</p>
-        </div>
+    <!-- Product Details --> 
+    <h3 class="text-xl font-bold mb-4">Our Products</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div
+    v-for="product in products"
+    :key="product.id"
+    @click="viewProductDetails(product)"
+    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow hover:bg-[#E8E2FA] transition"
+  >
+    <div class="flex items-center gap-8 opacity-100">
+      <!-- Image container div with specific styles -->
+      <div class="flex-none" style="width: 154px; height: 120px; padding: 43px 21px; gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
+        <img :src="product.image" alt="Product Image" class="w-full h-full object-contain" />
       </div>
+      <!-- Text container -->
+      <div class="flex-1" style="max-width: 396px; height: 136px; opacity: 1;">
+        <h4 class="font-bold text-lg mb-2">{{ product.name }}</h4>
+        <p class="text-gray-600">{{ product.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
       <!-- Benefits Section -->
       <h3 class="text-xl font-bold mb-4">Benefits</h3>
@@ -57,28 +64,31 @@
       </div>
     </div>
 
-   <!-- Product Details Modal -->
-   <div v-if="selectedProduct" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2 relative">
-      <button
-        @click="closeProductDetails"
-        class="absolute top-4 right-4 text-red-500 text-lg font-bold"
-      >
-        ✕
-      </button>
-      <div>
+    <div>
+    <!-- Product Details Modal -->
+    <div
+      v-if="selectedProduct"
+      class="modal show" >
+        <button @click="closeProductDetails" class="modal-close">✕</button>
+      <div class="modal-content">
         <img
           :src="selectedProduct.image"
           alt="Product Image"
-          class="w-40 h-40 object-contain mb-4 mx-auto"
+          class="w- h-40 object-contain mb-4 border border-[#CAC4CF]"
         />
-        <h2 class="text-2xl font-bold mb-4 text-center">{{ selectedProduct.name }}</h2>
-        <p class="text-gray-600 mb-6 text-center">{{ selectedProduct.description }}</p>
-      </div>
-      <div>
-        <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
+        <h2>{{ selectedProduct.name }}</h2>
+        
+        <p>{{ selectedProduct.description }}</p>
+        <div>
+          <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
+        </div>
       </div>
     </div>
+    <div
+      v-if="selectedProduct"
+      class="modal-overlay show"
+      @click="closeProductDetails"
+    ></div>
   </div>
 </div>
 
@@ -155,8 +165,65 @@ export default {
 </script>
 
 <style scoped>
+/* Modal styling for side display */
 .modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 25%;
+  max-width: 400px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -1px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
   z-index: 50;
+}
+
+.modal.show {
+  display: block;
+  transform: translateX(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.modal-overlay.show {
+  display: block;
 }
 .flex-col strong {
   margin-bottom: 4px; 
