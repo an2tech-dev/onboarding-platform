@@ -88,13 +88,18 @@
         <img
           :src="selectedProduct.image"
           alt="Product Image"
-          class="w- h-40 object-contain mb-4 border border-[#CAC4CF]"
+          class="w-[407px] h-[218px] object-contain mb-4 border border-[#CAC4CF] gap-[10px] p-[81px]"
         />
-        <h2>{{ selectedProduct.name }}</h2>
-        
-        <p>{{ selectedProduct.description }}</p>
         <div>
+        <h2 class="w-[171px] h-[32px] font-bold text-xl mb-4">{{ selectedProduct.name }}</h2>
+        </div>
+        <div class="w-[407px] h-[128px] gap-[8px]"> 
+        <p class="w-[73px] h-[20px] text-sm mb-2 font-bold">Description</p>
+        <p class="w-[350px] h-[100px] text-sm">{{ selectedProduct.description }}</p>
+         </div>
+         <div class="w-[195px] h-[48px] gap-[16px] flex flex-col items-start"> 
           <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
+        </div>
         </div>
       </div>
     </div>
@@ -104,7 +109,7 @@
       @click="closeProductDetails"
     ></div>
   </div>
-</div>
+
 
 </template>
 
@@ -219,10 +224,17 @@ export default {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  width: 44px;
+  height: 44px;
+  top: 16px;
+  left: 925px;
+  padding: 14px;
+  position: absolute;
 }
 
 .modal-content {
   padding: 20px;
+  
 }
 
 .modal-overlay {
