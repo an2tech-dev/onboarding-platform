@@ -11,7 +11,7 @@
             />
           </div>
           <div class="flex flex-col">
-            <h1 class="text-2xl font-semibold text-[#1F1048] m-0">
+            <h1 class="text-2xl text-[#1F1048] m-0">
               Welcome to {{ company.name }}
             </h1>
             <p class="text-base leading-6 text-[#1F1048] mt-2 tracking-wide">
@@ -50,6 +50,12 @@ export default {
 </script>
 
 <style scoped>
+@import '../../css/fonts.css';
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .shadow-container {
   width: 1128px;
   height: 194px;
