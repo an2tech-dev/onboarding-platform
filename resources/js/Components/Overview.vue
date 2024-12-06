@@ -8,60 +8,47 @@
       <p class="text-gray-600 mb-6">{{ company.description }}</p>
 
       <!-- Company Details -->
-<div class="grid grid-cols-4 gap-4 mb-6">
-  <div class="flex flex-col items-start">
-    <strong class="text-gray-700">Established:</strong>
-    <span class="text-gray-600">{{ prettifyDate(company.established) || 'N/A' }}</span>
-  </div>
-  <div class="flex flex-col items-start">
-    <strong class="text-gray-700">Team members:</strong>
-    <span class="text-gray-600">{{ company.team_members || 'N/A' }}</span>
-  </div>
-  <div class="flex flex-col items-start">
-    <strong class="text-gray-700">Office size:</strong>
-    <span class="text-gray-600">{{ company.office_size || 'N/A' }}</span>
-  </div>
-  <div class="flex flex-col items-start">
-    <strong class="text-gray-700">Floors:</strong>
-    <span class="text-gray-600">{{ company.floors || 'N/A' }}</span>
-  </div>
-</div>
-
-<!-- Product Details -->
-<h3 class="text-xl mb-4">Our Products</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-  <div
-    v-for="product in products"
-    :key="product.id"
-    @click="viewProductDetails(product)"
-    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow-lg hover:bg-[#E8E2FA] transition"
-  >
-    <div class="flex items-center">
-      <div
-        class="flex-none"
-        style="
-          width: 154px; 
-          height: 120px; 
-          padding: 43px 21px; 
-          gap: 10px; 
-          border-radius: 6px 0px 0px 0px; 
-          background-color: white; 
-          opacity: 1;
-        "
-      >
-        <img 
-          :src="product.image" 
-          alt="Product Image" 
-          class="w-full h-full object-contain" 
-        />
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="flex flex-col items-start">
+        <strong class="text-gray-800">Established:</strong>
+        <span class="text-gray-600">{{ prettifyDate(company.established) || 'N/A' }}</span>
       </div>
-      <div class="ml-4">
-        <h4 class=" text-lg mb-2">{{ product.name }}</h4>
-        <p class="text-gray-600">{{ product.description }}</p>
+      <div class="flex flex-col items-start">
+        <strong class="text-gray-800">Team members:</strong>
+        <span class="text-gray-600">{{ company.team_members || 'N/A' }}</span>
+      </div>
+      <div class="flex flex-col items-start">
+        <strong class="text-gray-800">Office size:</strong>
+        <span class="text-gray-600">{{ company.office_size || 'N/A' }}</span>
+      </div>
+      <div class="flex flex-col items-start">
+        <strong class="text-gray-800">Floors:</strong>
+        <span class="text-gray-600">{{ company.floors || 'N/A' }}</span>
       </div>
     </div>
-  </div>
-</div>
+
+    <!-- Product Details --> 
+    <h3 class="text-xl font-bold mb-4">Our Products</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        @click="viewProductDetails(product)"
+        class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow hover:bg-[#E8E2FA] transition"
+      >
+        <div class="flex items-center justify-center gap-8 opacity-100">
+          <!-- Image container div with specific styles -->
+          <div class="flex-none" style="width: 154px; height: 120px; padding: 43px 21px; gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
+            <img :src="product.image" alt="Product Image" class="w-full h-full object-contain" />
+          </div>
+          <!-- Text container -->
+          <div class="flex flex-col gap-2">
+            <h4 class="font-bold text-lg">{{ product.name }}</h4>
+            <p class="text-gray-600">{{ truncateDescription(product.description, 50) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
@@ -80,34 +67,42 @@
 
     <div>
     <!-- Product Details Modal -->
-    <div
-      v-if="selectedProduct"
-      class="modal show" >
-        <button @click="closeProductDetails" class="modal-close">✕</button>
-      <div class="modal-content">
-        <img
-          :src="selectedProduct.image"
-          alt="Product Image"
-          class="w-[407px] h-[218px] object-contain mb-4 border border-[#CAC4CF] gap-[10px] p-[81px]"
-        />
-        <div>
-        <h2 class="w-[171px] h-[32px] font-bold text-xl mb-4">{{ selectedProduct.name }}</h2>
-        </div>
-        <div class="w-[407px] h-[128px] gap-[8px]"> 
-        <p class="w-[73px] h-[20px] text-sm mb-2 font-bold">Description</p>
-        <p class="w-[350px] h-[100px] text-sm">{{ selectedProduct.description }}</p>
-         </div>
-         <div class="w-[195px] h-[48px] gap-[16px] flex flex-col items-start"> 
-          <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
+      <div
+        v-if="selectedProduct"
+        class="modal show" >
+          <!-- <button @click="closeProductDetails" class="modal-close">✕</button> -->
+        <div class="modal-content">
+
+          <img
+            :src="selectedProduct.image"
+            alt="Product Image"
+            class="w-full max-h-[208px]  mb-4 border border-[#CAC4CF] rounded-lg"
+          />
+
+          <div class="flex flex-col gap-4">
+
+            <h2 class="text-[#1F1048] text-2xl font-normal">{{ selectedProduct.name }}</h2>
+
+            <div class="flex flex-col gap-2">
+              <span class="text-sm text-[#1F1048] font-bold">Description</span>
+              <span class="text-sm text-[#1F1048] font-normal">{{ selectedProduct.description }} </span>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+              <span class="text-sm text-[#1F1048] font-bold">Released</span>
+              <span class="text-sm text-[#1F1048] font-normal">{{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }} </span>
+            </div>
+          </div>
+
         </div>
         </div>
       </div>
+      <div
+        v-if="selectedProduct"
+        class="modal-overlay show"
+        @click="closeProductDetails"
+      >
     </div>
-    <div
-      v-if="selectedProduct"
-      class="modal-overlay show"
-      @click="closeProductDetails"
-    ></div>
   </div>
 
 
@@ -144,6 +139,7 @@ export default {
           },
         });
 
+
         this.products = productsResponse.data.map((product) => ({
           ...product,
         }));
@@ -152,7 +148,12 @@ export default {
       }
     },
 
-   
+    truncateDescription(description, maxLength) {
+      if (!description) return '';
+      return description.length > maxLength
+        ? description.substring(0, maxLength) + '...'
+        : description;
+    },
     prettifyDate(date) {
       if (!date) return 'N/A'; 
 
@@ -165,8 +166,11 @@ export default {
       }
     },
 
+
     viewProductDetails(product) {
       this.selectedProduct = product;
+      // console.log('this.selectedProduct', this.selectedProduct);
+
     },
     closeProductDetails() {
       this.selectedProduct = null;
@@ -190,8 +194,7 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  width: 25%;
-  max-width: 400px;
+  max-width: 455px;
   height: 100%;
   background-color: #ffffff;
   box-shadow: -1px 0px 10px rgba(0, 0, 0, 0.1);
@@ -233,8 +236,7 @@ export default {
 }
 
 .modal-content {
-  padding: 20px;
-  
+  padding: 24px;
 }
 
 .modal-overlay {

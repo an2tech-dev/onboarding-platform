@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use GuzzleHttp\Psr7\Request;
 
 class CompanyController extends Controller  
 {
@@ -17,13 +19,13 @@ class CompanyController extends Controller
 
     public function index()
     {
-        if (auth()->user()->hasRole('Administrator')) {
-            $companies = Company::all();
-        } else {
-            $companies = auth()->user()->company ? [auth()->user()->company] : [];
+        if (!auth()->check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
 
-        return response()->json($companies);
+        $companies = auth()->user()->company ? [auth()->user()->company] : [];
+
+        return response()->json($companies, 200);
     }
 
     public function store(StoreCompanyRequest $request)
@@ -50,5 +52,25 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
         $company->delete();
         return response()->json(null, 204);
+    }
+
+    public function userCompany()
+    {
+        $user = Auth::user();
+
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        if (!$user->company_id) {
+            return response()->json(['message' => 'User is not associated with any company'], 404);
+        }
+
+        $company = $user->company;
+
+        return response()->json([
+            'company' => $company,
+        ], 200);
     }
 }

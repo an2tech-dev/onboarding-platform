@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->word() . ' Product',
             'description' => $this->faker->sentence(20),
             'release_date' => $this->faker->date('Y-m-d', 'now'),
-            'product_image' => $this->faker->imageUrl(640, 480, 'product', true, 'Faker'),
+            'product_image' => 'https://media.istockphoto.com/id/1316134499/photo/a-concept-image-of-a-magnifying-glass-on-blue-background-with-a-word-example-zoom-inside-the.jpg?s=612x612&w=0&k=20&c=sZM5HlZvHFYnzjrhaStRpex43URlxg6wwJXff3BE9VA=', // Set a static URL
         ];
     }
 }

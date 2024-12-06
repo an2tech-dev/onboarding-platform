@@ -1,10 +1,10 @@
 <template>
   <div class="bg-[#F4EFFC] flex flex-col">
-    <div v-if="!isLoginPage" class="container mx-auto p-6 bg-[#F4EFFC]">
+    <div v-if="!isLoginPage" class="max-w-screen-xl mx-auto bg-[#F4EFFC]">
       <Welcome />
     </div>
 
-    <div class="flex flex-1 container mx-auto">
+    <div class="flex flex-1 mx-auto max-w-screen-xl">
       <NavigationBar v-if="!isLoginPage" />
 
       <div class="flex-1 p-6">

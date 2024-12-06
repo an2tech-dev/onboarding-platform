@@ -50,13 +50,15 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->required()
                     ->email()
-                    ->unique('users', 'email')
+                    ->unique('users', 'email', ignoreRecord: true)
                     ->label('Email'),
                 Forms\Components\TextInput::make('password')
-                    ->nullable() 
-                    ->label('Password')
                     ->password()
-                    ->minLength(8),
+                    ->nullable()
+                    ->label('Password')
+                    ->dehydrateStateUsing(fn ($state) => $state ? bcrypt($state) : null)
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->helperText('Leave blank to keep the current password.'),
                 Forms\Components\Select::make('company_id')
                     ->relationship('company', 'name')
                     ->nullable() 
