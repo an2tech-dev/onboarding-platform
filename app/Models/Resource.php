@@ -17,10 +17,6 @@ class Resource extends Model
         'url',
     ];
 
-    protected $casts = [
-        'categories' => 'array',
-    ];
-
     public function company()
     {
         return $this->belongsTo(Company::class);

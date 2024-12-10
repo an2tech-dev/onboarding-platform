@@ -1,19 +1,18 @@
 <?php
 namespace App\Filament\Resources;
 
+use App\Models\Company;
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Company;
+use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\CompanyResource\Pages; 
 
 class CompanyResource extends Resource
@@ -76,25 +75,9 @@ class CompanyResource extends Resource
                 TextInput::make('floors')
                     ->label('Floors')
                     ->nullable(),
-                Repeater::make('benefits')
-                ->label('Benefits')
-                ->schema([
-                    TextInput::make('benefit')
-                        ->label('Benefit')
-                        ->required(),
-                ])
-                ->columns(1)
-                ->nullable()
-                ->afterStateHydrated(function ($state, $set) {
-                    // Convert flat array of strings to objects for display in Repeater
-                    if (is_array($state)) {
-                        $set('benefits', collect($state)->map(fn ($benefit) => ['benefit' => $benefit])->toArray());
-                    }
-                })
-                ->mutateDehydratedStateUsing(function ($state) {
-                    // Convert array of objects back to flat array of strings for storage
-                    return collect($state)->pluck('benefit')->toArray();
-                })
+                TextInput::make('benefits')
+                    ->label('Benefits')
+                    ->nullable(),
             ]);
     }
 
@@ -109,12 +92,12 @@ class CompanyResource extends Resource
                 TextColumn::make('team_members')->label('Team Members')->sortable(),
                 TextColumn::make('office_size')->label('Office Size (sqft)')->sortable(),
                 TextColumn::make('floors')->label('Floors')->limit(50), 
+                TextColumn::make('benefits')->label('Benefits')->limit(50), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ]);
-            
     }
 
     public static function getEloquentQuery(): Builder

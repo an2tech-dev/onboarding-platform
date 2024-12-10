@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F4EFFC]">
+  <div class="p-8 bg-[#F4EFFC]">
     <div v-for="company in companies" :key="company.id" class="flex justify-center mt-5">
       <div class="shadow-container flex items-center gap-[10px]">
         <div class="flex items-center gap-[30px] w-full h-full p-[24px] bg-white border border-[#E7DEF8] rounded-[20px] shadow-lg-custom">

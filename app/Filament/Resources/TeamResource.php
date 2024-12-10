@@ -65,6 +65,10 @@ class TeamResource extends Resource
             ->required()
             ->label('Team Name');
 
+        $schema[] = TextInput::make('members_count')
+            ->numeric()
+            ->required()
+            ->label('Number of Members');
 
         return $form->schema($schema);
     }

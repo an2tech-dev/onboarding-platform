@@ -33,19 +33,6 @@ class UserFactory extends Factory
     }
 
     /**
-     * Create a specific admin user.
-     */
-    public function admin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'), // You can adjust the password as needed
-        ]);
-    }
-
-
-    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

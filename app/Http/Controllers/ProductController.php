@@ -16,19 +16,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        if (!auth()->check()) {
-            return response()->json(['message' => 'User not authenticated'], 401);
+        if (auth()->user()->hasRole('Administrator')) {
+            return response()->json(Product::all());
+        } else {
+            return response()->json(Product::where('company_id', auth()->user()->company_id)->get());
         }
-    
-        $user = auth()->user();
-
-         if (!$user->company_id) {
-            return response()->json(['message' => 'User is not associated with any company'], 404);
-        }
-
-        $products = Product::where('company_id', $user->company_id)->get();
-
-        return response()->json($products, 200);
     }
   
     

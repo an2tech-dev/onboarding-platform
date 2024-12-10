@@ -21,7 +21,6 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/company', [CompanyController::class, 'index'])->middleware('role:Administrator|Manager');
-    Route::get('/my-company', [CompanyController::class, 'userCompany'])->middleware('role:Administrator|Manager');
     Route::post('/company', [CompanyController::class, 'store'])->middleware('role:Administrator');
     Route::put('/company/{id}', [CompanyController::class, 'update'])->middleware('role:Administrator|Manager');
     Route::delete('/company/{id}', [CompanyController::class, 'destroy'])->middleware('role:Administrator');
