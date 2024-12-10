@@ -90,14 +90,14 @@
       </div>
 
       <!-- Resource Details Modal -->
-      <div v-if="selectedResource" class="modal show">
-        <button @click="closeResourceDetails" class="modal-close">✕</button>
-        <div class="modal-content">
+      <div v-if="selectedResource" class="resource-modal show">
+        <button @click="closeResourceDetails" class="resource-modal-close">✕</button>
+        <div class="resource-modal-content">
           <h2 class="text-xl font-bold mb-4">{{ selectedResource.title }}</h2>
           <p class="text-gray-600">{{ selectedResource.description }}</p>
         </div>
       </div>
-      <div v-if="selectedResource" class="modal-overlay show" @click="closeResourceDetails"></div>
+      <div v-if="selectedResource" class="resource-modal-overlay show" @click="closeResourceDetails"></div>
     </div>
   </div>
 </template>
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style scoped>
-.modal {
+.resource-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -138,12 +138,12 @@ export default {
   z-index: 50;
 }
 
-.modal.show {
+.resource-modal.show {
   display: block;
   transform: translateX(0);
 }
 
-.modal-close {
+.resource-modal-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -153,11 +153,11 @@ export default {
   cursor: pointer;
 }
 
-.modal-content {
+.resource-modal-content {
   padding: 20px;
 }
 
-.modal-overlay {
+.resource-modal-overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -168,7 +168,7 @@ export default {
   z-index: 40;
 }
 
-.modal-overlay.show {
+.resource-modal-overlay.show {
   display: block;
 }
 </style>
