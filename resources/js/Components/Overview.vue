@@ -34,7 +34,7 @@
     v-for="product in products"
     :key="product.id"
     @click="viewProductDetails(product)"
-    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-lg shadow-lg hover:bg-[#E8E2FA] transition"
+    class="cursor-pointer bg-[#F9F7FE] p-4 rounded-xl shadow-lg hover:bg-[#E8E2FA] transition"
   >
     <div class="flex items-center">
       <div
@@ -56,7 +56,7 @@
         />
       </div>
       <div class="ml-4">
-        <h4 class=" text-lg mb-2">{{ product.name }}</h4>
+        <h4 class=" text-2xl mb-2">{{ product.name }}</h4>
         <p class="text-gray-600">{{ product.description }}</p>
       </div>
     </div>
@@ -95,7 +95,7 @@
         </div>
         <div class="w-[407px] h-[128px] gap-[8px]"> 
         <p class="w-[73px] h-[20px] text-sm mb-2 font-bold">Description</p>
-        <p class="w-[350px] h-[100px] text-sm">{{ selectedProduct.description }}</p>
+        <p class="w-[340px] h-[90px] text-sm">{{ selectedProduct.description }}</p>
          </div>
          <div class="w-[195px] h-[48px] gap-[16px] flex flex-col items-start"> 
           <strong>Released:</strong> {{ formatReleaseDate(selectedProduct.release_date) || 'N/A' }}
