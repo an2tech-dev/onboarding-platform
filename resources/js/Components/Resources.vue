@@ -107,7 +107,7 @@ export default {
   name: "Resources",
   data() {
     return {
-      selectedResource: null, // To store details of the selected resource
+      selectedResource: null, 
     };
   },
   methods: {
