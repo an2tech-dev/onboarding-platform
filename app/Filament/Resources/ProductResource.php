@@ -93,20 +93,32 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')->label('Company')->sortable(),
-                TextColumn::make('name')->label('Product Name')->sortable(),
-                TextColumn::make('description')->label('Description')->limit(50),
-                TextColumn::make('release_date')->label('Release Date')->date(),
+                TextColumn::make('company.name')
+                    ->label('Company')
+                    ->sortable()
+                    ->searchable(), // Add searchable for the company name
+                TextColumn::make('name')
+                    ->label('Product Name')
+                    ->sortable()
+                    ->searchable(), // Add searchable for the product name
+                TextColumn::make('description')
+                    ->label('Description')
+                    ->limit(50)
+                    ->searchable(), // Add searchable for the description
+                TextColumn::make('release_date')
+                    ->label('Release Date')
+                    ->date()
+                    ->sortable(),
                 ImageColumn::make('product_image')->label('Product Image'),
-                // TextColumn::make('created_at')->label('Created At')->dateTime(),
-                // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->filters([
-            ]);
+                // Add your filters here if needed
+            ])
+            ->searchable(); // Enable global search
     }
 
     public static function getEloquentQuery(): Builder
