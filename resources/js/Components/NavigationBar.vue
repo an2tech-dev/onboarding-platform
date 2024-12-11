@@ -64,7 +64,6 @@ const menuItems = ref([
   { name: "Company overview", route: "/overview" },
   { name: "Teams", route: "/teams" },
   { name: "Your role details", route: "/role-details" },
-  { name: "Technology stack", route: "/technology-stack" },
   { name: "Processes and schedules", route: "/processes-schedules" },
   { name: "Resources directory", route: "/resources" },
   { name: "Sign out", route: "/sign-out" },
