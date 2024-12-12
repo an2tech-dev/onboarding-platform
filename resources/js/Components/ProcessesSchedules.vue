@@ -1,7 +1,7 @@
 <template>
-  <div class="processes-and-schedules px-8 py-12 rounded-lg">
-    <h1 class="text-3xl font-bold text-gray-800 mb-8">Workflow Management</h1>
-    <p class="text-lg text-gray-600 mb-6">
+  <div class="processes-and-schedules px-4 py-6 rounded-lg">
+    <h1 class="text-xl sm:text-2xl text-gray-800 mb-4">Workflow Management</h1>
+    <p class="text-lg text-gray-600 mb-4">
       At Startux, we follow modern development methodologies to ensure efficiency and collaboration in our projects. You'll likely encounter:
     </p>
 
@@ -12,8 +12,8 @@
     </div>
 
     <!-- Meeting Rhythms Section -->
-    <h2 class="text-xl font-bold text-gray-800 mb-6">Meeting Rhythms</h2>
-    <p class="text-lg text-gray-600 mb-6">Communication is key to our success, and we maintain a structured 
+    <h2 class="text-lg  mb-4">Meeting Rhythms</h2>
+    <p class="text-lg text-gray-600 mb-4">Communication is key to our success, and we maintain a structured 
       meeting schedule to keep everyone informed and aligned:</p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
       <!-- Daily Stand-up Meetings -->
@@ -59,8 +59,8 @@
 
     <!--Typical Schedules-->
     <div class="typical-schedule-section px-2 py-4">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">Typical Schedules</h2>
-  <p class="text-lg text-gray-600 mb-6">We value work-life balance and offer flexibility to accommodate your needs.</p>
+  <h2 class="text-lg mb-4">Typical Schedules</h2>
+  <p class="text-lg text-gray-600 mb-4">We value work-life balance and offer flexibility to accommodate your needs.</p>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Standard Work Hours -->
     <div class="p-6 bg-purple-100 rounded-lg shadow">
@@ -99,7 +99,7 @@
    
 <!-- Tech Support Section -->
  <div class="px-2 py-4">
-<h2 class="text-xl font-semibold text-gray-800 mb-8">Tech support hub</h2>
+<h2 class="text-xl mb-4">Tech support hub</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
   <!-- Connectivity Issues -->
   <div class="p-4 bg-purple-50 rounded-lg shadow mb-6">

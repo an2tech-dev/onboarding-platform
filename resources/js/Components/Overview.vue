@@ -38,7 +38,7 @@
       >
         <div class="flex items-center justify-center gap-8 opacity-100">
           <!-- Image container div with specific styles -->
-          <div class="flex-none" style="width: 154px; height: 120px; padding: 43px 21px; gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
+          <div class="flex-none" style="width: 154px; height: 120px;  gap: 10px; border-radius: 6px 0px 0px 0px; opacity: 1;">
             <img :src="product.image" alt="Product Image" class="w-full h-full object-contain" />
           </div>
           <!-- Text container -->
@@ -70,14 +70,13 @@
       <div
         v-if="selectedProduct"
         class="modal show" >
-          <!-- <button @click="closeProductDetails" class="modal-close">✕</button> -->
+          <button @click="closeProductDetails" class="modal-close" >✕</button>
         <div class="modal-content">
 
           <img
             :src="selectedProduct.image"
             alt="Product Image"
-            class="w-full max-h-[208px]  mb-4 border border-[#CAC4CF] rounded-lg"
-          />
+            class="w-80 max-h-[150px]  mb-6 border border-[#CAC4CF] rounded-lg  "/>
 
           <div class="flex flex-col gap-4">
 
@@ -194,7 +193,7 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  max-width: 455px;
+  max-width: 343px;
   height: 100%;
   background-color: #ffffff;
   box-shadow: -1px 0px 10px rgba(0, 0, 0, 0.1);
@@ -229,9 +228,7 @@ export default {
   cursor: pointer;
   width: 44px;
   height: 44px;
-  top: 16px;
-  left: 925px;
-  padding: 14px;
+  right: 5px;
   position: absolute;
 }
 
