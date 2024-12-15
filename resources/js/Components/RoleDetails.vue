@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-gray-50 p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
+  <div class="bg-white p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
     <!-- Title and Description -->
     <div>
-      <h2 class="text-2xl font-bold text-gray-800 text-center sm:text-left">Role Overview</h2>
+      <h2 class="text-2xl text-gray-800 text-center sm:text-left">Role Overview</h2>
       <p class="text-gray-600 mt-2 text-center sm:text-left">
         As a Software Engineer at StarLabs, you will be responsible for developing and maintaining our software products. You will collaborate with cross-functional teams to design, implement, and deploy solutions that meet our customer needs.
       </p>
