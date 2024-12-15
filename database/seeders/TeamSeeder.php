@@ -8,18 +8,34 @@ use Illuminate\Database\Seeder;
 
 class TeamSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Create teams for existing companies
-        Company::all()->each(function ($company) {
-            Team::factory(3)->create([
-                'company_id' => $company->id,
-            ]);
-        });
+        $predefinedTeams = [
+            ['name' => 'Software Development'],
+            ['name' => 'Quality Assurance'],
+            ['name' => 'Product Management'],
+            ['name' => 'Customer Support'],
+            ['name' => 'Marketing'],
+        ];
 
-        Team::factory(5)->create();
+        Company::all()->each(function ($company) use ($predefinedTeams) {
+            foreach ($predefinedTeams as $team) {
+                Team::firstOrCreate(
+                    [
+                        'name' => $team['name'],
+                        'company_id' => $company->id
+                    ],
+                    $team
+                );
+            }
+            
+            // Create additional random teams if needed
+            $teamCount = Team::where('company_id', $company->id)->count();
+            if ($teamCount < 7) { // 5 predefined + 2 random
+                Team::factory(7 - $teamCount)->create([
+                    'company_id' => $company->id,
+                ]);
+            }
+        });
     }
 }
