@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Schedule;
 use App\Models\Company;
+use App\Models\Process;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id' => Company::factory(),
+            'process_id' => Process::factory(),
             'schedule_type' => $this->faker->randomElement(['Meeting', 'Deadline', 'Event', 'Reminder']),
             'start_time' => $this->faker->dateTimeBetween('now', '+1 week'),
             'end_time' => $this->faker->dateTimeBetween('+1 week', '+2 weeks'),

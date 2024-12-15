@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Schedule;
-use App\Models\Company;
 use Illuminate\Database\Seeder;
+use App\Models\Process;
 
 class ScheduleSeeder extends Seeder
 {
@@ -13,9 +13,9 @@ class ScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        Company::all()->each(function ($company) {
+        Process::all()->each(function ($process) {
             Schedule::factory(5)->create([
-                'company_id' => $company->id,
+                'process_id' => $process->id,
             ]);
         });
     }

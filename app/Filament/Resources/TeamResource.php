@@ -36,13 +36,13 @@ class TeamResource extends Resource
     public static function canEdit(Model $record): bool
     {
         return auth()->user()->hasRole('Administrator') || 
-               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->floor->company_id);
+               (auth()->user()->hasRole('Manager') && $record->floor && auth()->user()->company_id === $record->floor->company_id);
     }
 
     public static function canDelete(Model $record): bool
     {
         return auth()->user()->hasRole('Administrator') || 
-               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->floor->company_id);
+            (auth()->user()->hasRole('Manager') && $record->floor && auth()->user()->company_id === $record->floor->company_id);
     }
 
     public static function form(Form $form): Form
@@ -53,18 +53,24 @@ class TeamResource extends Resource
             $schema[] = Select::make('floor_id')
                 ->relationship('floor', 'name')
                 ->required()
-                ->label('Floor');
+                ->label('Floor')
+                ->searchable();
         } else {
             $schema[] = Select::make('floor_id')
-                ->options(Floor::where('company_id', auth()->user()->company_id)->pluck('name', 'id')) 
+                ->options(
+                    Floor::where('company_id', auth()->user()->company_id)
+                        ->pluck('name', 'id') 
+                        ->toArray() 
+                )
                 ->required()
-                ->label('Floor');
+                ->label('Floor')
+                ->searchable();
         }
 
         $schema[] = TextInput::make('name')
             ->required()
-            ->label('Team Name');
-
+            ->label('Team Name')
+            ->placeholder('Enter team name');
 
         return $form->schema($schema);
     }

@@ -32,24 +32,31 @@ class ScheduleResource extends Resource
             $schema[] = Forms\Components\Select::make('process_id')
                 ->options(
                     Process::where('company_id', auth()->user()->company_id)
-                        ->pluck('name', 'id') 
+                        ->pluck('name', 'id')
+                        ->toArray()
                 )
                 ->required()
                 ->label('Process');
         }
 
-        // Add the schedule fields after the process selection
         $schema[] = Forms\Components\TextInput::make('schedule_type')
             ->required()
             ->label('Schedule Type');
 
-        $schema[] = Forms\Components\TextInput::make('start_time')
+        $schema[] = Forms\Components\TimePicker::make('start_time')
             ->required()
             ->label('Start Time');
 
-        $schema[] = Forms\Components\TextInput::make('end_time')
+        $schema[] = Forms\Components\TimePicker::make('end_time')
             ->required()
             ->label('End Time');
+
+        $schema[] = Forms\Components\TextInput::make('title')
+            ->required()
+            ->label('Title');
+
+        $schema[] = Forms\Components\Textarea::make('description')
+            ->label('Description');
 
         return $form->schema($schema);
     }

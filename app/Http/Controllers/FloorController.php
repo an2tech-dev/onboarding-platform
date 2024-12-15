@@ -15,11 +15,21 @@ class FloorController extends Controller
 
     public function index()
     {
-        if (auth()->user()->hasRole('Administrator')) {
-            return response()->json(Floor::all());
-        } else {
-            return response()->json(Floor::where('company_id', auth()->user()->company_id)->get());
+        if (!auth()->check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
+
+        $user = auth()->user();
+
+        if (!$user->company_id) {
+            return response()->json(['message' => 'User is not associated with any company'], 404);
+        }
+
+        $floors = Floor::where('company_id', $user->company_id)
+            ->with('teams')
+            ->get();
+
+        return response()->json($floors, 200);
     }
 
     public function store(StoreFloorRequest $request)

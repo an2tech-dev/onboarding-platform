@@ -61,17 +61,28 @@ class ResourceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company.name')->label('Company'),
-                Tables\Columns\TextColumn::make('categories')->label('Categories'),
-                Tables\Columns\TextColumn::make('title')->label('Title'),
-                Tables\Columns\TextColumn::make('description')->label('Description'),
-                Tables\Columns\TextColumn::make('url')->label('Resource URL'),
-                // Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
+                Tables\Columns\TextColumn::make('company.name')
+                    ->label('Company')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('categories')
+                    ->label('Categories')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Title')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Description')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('url')
+                    ->label('Resource URL')
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ]);
+            ])
+            ->filters([])
+            ->searchable();
     }
 
     public static function getEloquentQuery(): Builder

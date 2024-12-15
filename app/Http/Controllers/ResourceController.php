@@ -15,11 +15,20 @@ class ResourceController extends Controller
 
     public function index()
     {
-        if (auth()->user()->hasRole('Administrator')) {
-            return response()->json(Resource::all());
-        } else {
-            return response()->json(Resource::where('company_id', auth()->user()->company_id)->get());
+
+        if (!auth()->check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
+    
+        $user = auth()->user();
+
+         if (!$user->company_id) {
+            return response()->json(['message' => 'User is not associated with any company'], 404);
+        }
+
+        $products = Resource::where('company_id', $user->company_id)->get();
+
+        return response()->json($products, 200);
     }
 
     public function store(StoreResourceRequest $request)

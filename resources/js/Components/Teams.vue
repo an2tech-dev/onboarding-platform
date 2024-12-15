@@ -124,56 +124,57 @@
   </div>
 </template>
 
-<script>
+<script>import apiService from "@/services/apiServices";
+
 export default {
   name: "Teams",
   data() {
     return {
-      selectedModal: null, 
-      selectedFloor: "First floor",
-      floors: [
-        { name: "First floor", teams: 4 },
-        { name: "Second floor", teams: 6 },
-        { name: "Third floor", teams: 2 },
-        { name: "Fourth floor", teams: 10 },
-      ],
-      teams: [
-        {
-          name: "TechTitans",
-          members: "40 members",
-          image: "",
-        },
-        {
-          name: "Team 1",
-          members: "3 members",
-          image: "../../css/images/img2.png",
-        },
-        {
-          name: "Team 2",
-          members: "12 members",
-          image: "../../css/images/img3.png",
-        },
-        {
-          name: "Team 3",
-          members: "6 members",
-          image:"image",
-        },
-      ],
+      selectedModal: null, // Modal for team details
+      selectedFloor: null, // Currently selected floor
+      floors: [], // Floors fetched from the API
+      selectedTeams: [], // Teams of the currently selected floor
+      isLoading: false, // Loading state
+      error: null, // Error state
     };
   },
   methods: {
-    viewTeamDetails(title, description) {
-      this.selectedModal = { title, description };
+    async fetchFloorsAndTeams() {
+      this.isLoading = true;
+      this.error = null;
+
+      try {
+        // Fetch floors with their associated teams from the API
+        const response = await apiService.get("api/floors");
+        this.floors = response;
+
+        console.log("Fetched Floors with Teams:", this.floors);
+
+        // Set default selected floor and its teams
+        if (this.floors.length > 0) {
+          this.selectFloor(this.floors[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching floors:", error);
+        this.error = "Failed to load floors. Please try again later.";
+      } finally {
+        this.isLoading = false;
+      }
     },
-    viewExperienceDetails(title, description) {
+    selectFloor(floor) {
+      this.selectedFloor = floor.name;
+      this.selectedTeams = floor.teams; // Update teams for the selected floor
+    },
+    viewTeamDetails(title, description) {
       this.selectedModal = { title, description };
     },
     closeModal() {
       this.selectedModal = null;
     },
-    selectFloor(floor) {
-      this.selectedFloor = floor.name;
-    },
+  },
+  mounted() {
+    // Fetch floors and teams when the component is mounted
+    this.fetchFloorsAndTeams();
   },
 };
 </script>

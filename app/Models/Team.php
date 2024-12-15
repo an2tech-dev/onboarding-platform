@@ -9,11 +9,11 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'company_id'];
+    protected $fillable = ['name', 'floor_id'];
 
-    public function company()
+    public function floors()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Floor::class);
     }
 
     public function users()
