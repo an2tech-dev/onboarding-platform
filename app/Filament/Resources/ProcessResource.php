@@ -90,6 +90,42 @@ class ProcessResource extends Resource
             ->columnSpanFull()
             ->itemLabel(fn (array $state): ?string => $state['title'] ?? null);
 
+        $schema[] = Repeater::make('information_data')
+            ->schema([
+                Forms\Components\TextInput::make('title')
+                    ->nullable(),
+                Forms\Components\Textarea::make('information')
+                    ->nullable(),
+                Forms\Components\Toggle::make('has_schedule')
+                    ->label('Enable Schedule')
+                    ->default(false)
+                    ->live(),
+                Forms\Components\TextInput::make('schedule_title')
+                    ->nullable()
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_schedule')),
+                Forms\Components\Textarea::make('schedule_text')
+                    ->nullable()
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_schedule')),
+                Forms\Components\Toggle::make('has_image')
+                    ->label('Enable Image')
+                    ->default(false)
+                    ->live(),
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('information-images')
+                    ->visibility('public')
+                    ->maxSize(5120)
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_image'))
+            ])
+            ->columns(1)
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'information')
+            ->defaultItems(1)
+            ->addActionLabel('Add Information')
+            ->collapsible()
+            ->cloneable()
+            ->columnSpanFull()
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Information Item');
+
         return $form->schema($schema);
     }
 
