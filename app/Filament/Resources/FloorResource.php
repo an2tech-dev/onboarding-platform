@@ -49,30 +49,40 @@ class FloorResource extends Resource
         $schema = [];
 
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Select::make('company_id')
+            $schema[] = Forms\Components\Select::make('company_id')
                 ->relationship('company', 'name')
-                ->required()
-                ->label('Company');
-        } else {
-            $schema[] = Select::make('company_id')
-                ->options([
-                    auth()->user()->company_id => auth()->user()->company->name 
-                ])
-                ->required()
-                ->label('Company')
-                ->default(auth()->user()->company_id); 
+                ->required();
         }
 
-        $schema[] = TextInput::make('name')
+        $schema[] = Forms\Components\TextInput::make('name')
             ->required()
-            ->label('Floor Name');
+            ->maxLength(255);
 
-        $schema[] = TextInput::make('floor_number')
-            ->numeric()
+        $schema[] = Forms\Components\TextInput::make('floor_number')
             ->required()
-            ->label('Floor Number');
+            ->numeric();
 
         return $form->schema($schema);
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $user = auth()->user();
+        \Log::info('Creating floor with user:', [
+            'user_id' => $user->id,
+            'company_id' => $user->company_id,
+            'is_manager' => $user->hasRole('Manager'),
+            'data' => $data
+        ]);
+
+        if ($user->hasRole('Manager')) {
+            if (!$user->company_id) {
+                \Log::warning('Manager has no company_id assigned');
+            }
+            $data['company_id'] = $user->company_id;
+        }
+
+        return $data;
     }
 
     public static function table(Table $table): Table
