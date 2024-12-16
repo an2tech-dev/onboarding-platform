@@ -18,11 +18,24 @@ class ProcessFactory extends Factory
      */
     public function definition(): array
     {
-        return [
+        $type = $this->faker->randomElement(['workflow', 'information']);
+        $data = [
             'company_id' => Company::factory(),
             'name' => $this->faker->word() . ' Process',
             'description' => $this->faker->sentence(50),
-            'type' => $this->faker->randomElement(['workflow', 'information']),
+            'type' => $type,
         ];
+
+        if ($type === 'workflow') {
+            $data['workflow_data'] = collect(range(1, 3))->map(function () {
+                return [
+                    'title' => $this->faker->sentence(),
+                    'description' => $this->faker->paragraph(),
+                    'image' => null
+                ];
+            })->toArray();
+        }
+
+        return $data;
     }
 }

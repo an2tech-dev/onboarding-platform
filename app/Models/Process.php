@@ -9,7 +9,11 @@ class Process extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'name', 'description', 'type'];
+    protected $fillable = ['company_id', 'name', 'description', 'type', 'workflow_data'];
+
+    protected $casts = [
+        'workflow_data' => 'array',
+    ];
 
     public function company()
     {

@@ -11,6 +11,8 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\FileUpload;
 
 class ProcessResource extends Resource
 {
@@ -59,11 +61,34 @@ class ProcessResource extends Resource
                 'information' => 'Information'
             ])
             ->required()
-            ->default('workflow');
+            ->default('workflow')
+            ->live();
 
         $schema[] = Forms\Components\TextInput::make('description')
             ->required()
             ->maxLength(255);
+
+        $schema[] = Repeater::make('workflow_data')
+            ->schema([
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('description')
+                    ->required(),
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('workflow-images')
+                    ->visibility('public')
+                    ->maxSize(5120)
+            ])
+            ->columns(1)
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'workflow')
+            ->defaultItems(1)
+            ->addActionLabel('Add Workflow Step')
+            ->collapsible()
+            ->cloneable()
+            ->columnSpanFull()
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null);
 
         return $form->schema($schema);
     }

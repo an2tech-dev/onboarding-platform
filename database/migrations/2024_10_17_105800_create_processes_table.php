@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->enum('type', ['workflow', 'information'])->default('workflow');
+            $table->json('workflow_data')->nullable();
             $table->timestamps();
         });
     }
