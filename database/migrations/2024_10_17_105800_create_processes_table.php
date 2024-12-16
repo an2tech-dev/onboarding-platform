@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('company')->onDelete('cascade'); 
             $table->string('name');
             $table->text('description');
+            $table->enum('type', ['workflow', 'information'])->default('workflow');
             $table->timestamps();
         });
     }

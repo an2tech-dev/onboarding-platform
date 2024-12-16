@@ -53,6 +53,14 @@ class ProcessResource extends Resource
             ->required()
             ->maxLength(255);
 
+        $schema[] = Forms\Components\Select::make('type')
+            ->options([
+                'workflow' => 'Workflow',
+                'information' => 'Information'
+            ])
+            ->required()
+            ->default('workflow');
+
         $schema[] = Forms\Components\TextInput::make('description')
             ->required()
             ->maxLength(255);
@@ -66,6 +74,13 @@ class ProcessResource extends Resource
             ->columns([
                 TextColumn::make('company.name')->sortable(),
                 TextColumn::make('name')->sortable(),
+                TextColumn::make('type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'workflow' => 'success',
+                        'information' => 'info',
+                        default => 'gray',
+                    }),
                 TextColumn::make('description')->sortable(),
             ])
             ->filters([])

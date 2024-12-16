@@ -21,7 +21,8 @@ class ProcessFactory extends Factory
         return [
             'company_id' => Company::factory(),
             'name' => $this->faker->word() . ' Process',
-            'description' => $this->faker->sentence(50), 
+            'description' => $this->faker->sentence(50),
+            'type' => $this->faker->randomElement(['workflow', 'information']),
         ];
     }
 }
