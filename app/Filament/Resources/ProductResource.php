@@ -5,26 +5,18 @@ namespace App\Filament\Resources;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Filament\Resources\ProductResource\Pages;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\ImageColumn;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
-    protected static ?string $navigationLabel = 'Products';
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart'; 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function canViewAny(): bool
     {
@@ -53,34 +45,25 @@ class ProductResource extends Resource
         $schema = [];
 
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Select::make('company_id')
+            $schema[] = Forms\Components\Select::make('company_id')
                 ->relationship('company', 'name')
-                ->required()
-                ->label('Company');
-        } else {
-            $schema[] = Select::make('company_id')
-                ->options([
-                    auth()->user()->company_id => auth()->user()->company->name 
-                ])
-                ->required()
-                ->label('Company')
-                ->default(auth()->user()->company_id); 
+                ->required();
         }
 
-        $schema[] = TextInput::make('name')
+        $schema[] = Forms\Components\TextInput::make('name')
             ->required()
-            ->label('Product Name');
+            ->maxLength(255);
 
-        $schema[] = Textarea::make('description')
-            ->label('Product Description')
-            ->nullable();
+        $schema[] = Forms\Components\Textarea::make('description')
+            ->required()
+            ->maxLength(255);
 
-        $schema[] = DatePicker::make('release_date')
+        $schema[] = Forms\Components\DatePicker::make('release_date')
             ->label('Release Date')
             ->nullable()
             ->displayFormat('Y-m-d');
 
-        $schema[] = FileUpload::make('product_image')
+        $schema[] = Forms\Components\FileUpload::make('product_image')
             ->label('Product Image')
             ->image()
             ->nullable();
@@ -92,33 +75,26 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')
-                    ->label('Company')
-                    ->sortable()
-                    ->searchable(), // Add searchable for the company name
+                TextColumn::make('company.name')->sortable(),
                 TextColumn::make('name')
                     ->label('Product Name')
                     ->sortable()
-                    ->searchable(), // Add searchable for the product name
+                    ->searchable(),
                 TextColumn::make('description')
                     ->label('Description')
                     ->limit(50)
-                    ->searchable(), // Add searchable for the description
+                    ->searchable(), 
                 TextColumn::make('release_date')
                     ->label('Release Date')
                     ->date()
                     ->sortable(),
                 ImageColumn::make('product_image')->label('Product Image'),
             ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
-            ->filters([
-                // Add your filters here if needed
-            ])
-            ->searchable(); // Enable global search
+            ]);
     }
 
     public static function getEloquentQuery(): Builder
@@ -133,9 +109,9 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'), 
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'index' => ProductResource\Pages\ListProducts::route('/'),
+            'create' => ProductResource\Pages\CreateProduct::route('/create'),
+            'edit' => ProductResource\Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }
