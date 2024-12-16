@@ -42,6 +42,12 @@ class FloorController extends Controller
     
         try {
             $floor = Floor::create($data);
+            
+            // If teams were selected, attach them to the floor
+            if (isset($data['teams'])) {
+                $floor->teams()->sync($data['teams']);
+            }
+            
             return response()->json(['message' => 'Floor created successfully!', 'floor' => $floor], 201); 
         } catch (\Exception $e) {
             return response()->json(['error' => 'Floor could not be created'], 500);
@@ -49,21 +55,26 @@ class FloorController extends Controller
     }
 
     public function update(UpdateFloorRequest $request, $id)
-{
-    $data = $request->validated();
-    $floor = Floor::findOrFail($id);
+    {
+        $data = $request->validated();
+        $floor = Floor::findOrFail($id);
 
-    if (auth()->user()->hasRole('Manager') && $floor->company_id !== auth()->user()->company_id) {
-        return response()->json(['error' => 'Unauthorized to update this floor'], 403);
-    }
+        if (auth()->user()->hasRole('Manager') && $floor->company_id !== auth()->user()->company_id) {
+            return response()->json(['error' => 'Unauthorized to update this floor'], 403);
+        }
 
-    try {
-        $floor->update($data);
-        return response()->json(['message' => 'Floor updated successfully!', 'floor' => $floor]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Floor could not be updated'], 500);
+        try {
+            $floor->update($data);
+            
+            if (isset($data['teams'])) {
+                $floor->save();
+            }
+            
+            return response()->json(['message' => 'Floor updated successfully!', 'floor' => $floor]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Floor could not be updated'], 500);
+        }
     }
-}
 
     public function destroy($id)
     {

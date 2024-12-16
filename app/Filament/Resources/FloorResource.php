@@ -62,6 +62,23 @@ class FloorResource extends Resource
             ->required()
             ->numeric();
 
+        $schema[] = Forms\Components\Select::make('teams')
+            ->multiple()
+            ->relationship(
+                'teams',
+                'name',
+                fn (Builder $query) => auth()->user()->hasRole('Administrator') 
+                    ? $query 
+                    : $query->where('company_id', auth()->user()->company_id)
+            )
+            ->preload()
+            ->searchable()
+            ->afterStateHydrated(function ($state, $set, $record) {
+                if ($record) {
+                    $set('teams', $record->teams->pluck('id')->toArray());
+                }
+            });
+
         return $form->schema($schema);
     }
 

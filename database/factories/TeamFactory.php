@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Team;
-use App\Models\Floor;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class TeamFactory extends Factory
     {
         return [
             'name' => $this->faker->word() . ' Team',
-            'floor_id' => Floor::factory(),
+            'company_id' => Company::factory(),
         ];
     }
 }

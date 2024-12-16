@@ -16,6 +16,11 @@ class Team extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function floors()
+    {
+        return $this->belongsToMany(Floor::class)->withTimestamps();
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
