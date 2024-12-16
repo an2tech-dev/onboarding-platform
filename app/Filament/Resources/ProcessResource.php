@@ -18,6 +18,7 @@ class ProcessResource extends Resource
 {
     protected static ?string $model = Process::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Information';
 
     public static function canViewAny(): bool
     {

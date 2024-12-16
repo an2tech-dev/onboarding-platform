@@ -22,6 +22,7 @@ class TeamResource extends Resource
 
     protected static ?string $navigationLabel = 'Teams';
     protected static ?string $navigationIcon = 'heroicon-o-users'; 
+    protected static ?string $navigationGroup = 'General';
 
     public static function canViewAny(): bool
     {

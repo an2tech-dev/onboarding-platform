@@ -17,6 +17,7 @@ class ResourceResource extends Resource
 {
     protected static ?string $model = ResourceModel::class;
     protected static ?string $navigationIcon = 'heroicon-o-code-bracket-square';
+    protected static ?string $navigationGroup = 'Information';
 
     public static function canViewAny(): bool
     {

@@ -23,6 +23,7 @@ class CompanyResource extends Resource
 
     protected static ?string $navigationLabel = 'Companies';
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function canViewAny(): bool
     {
