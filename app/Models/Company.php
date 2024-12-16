@@ -41,11 +41,6 @@ class Company extends Model
     {
         return $this->hasMany(Process::class);
     }
-
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
    
     public function resources()
     {
