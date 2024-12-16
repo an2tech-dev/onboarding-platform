@@ -20,7 +20,7 @@ class FloorResource extends Resource
     protected static ?string $model = Floor::class;
 
     protected static ?string $navigationLabel = 'Floors';
-    protected static ?string $navigationIcon = 'heroicon-o-home'; 
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2'; 
 
     public static function canViewAny(): bool
     {

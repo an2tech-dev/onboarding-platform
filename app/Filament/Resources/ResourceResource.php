@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ResourceResource extends Resource
 {
     protected static ?string $model = ResourceModel::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-code-bracket-square';
 
     public static function canViewAny(): bool
     {
