@@ -55,13 +55,34 @@ class TeamResource extends Resource
                 ->relationship('company', 'name')
                 ->required()
                 ->label('Company')
-                ->searchable();
+                ->searchable()
+                ->live()
+                ->afterStateUpdated(fn ($state, callable $set) => $set('products', []));
         }
 
         $schema[] = TextInput::make('name')
             ->required()
             ->label('Team Name')
             ->placeholder('Enter team name');
+
+        $schema[] = Select::make('products')
+            ->multiple()
+            ->relationship(
+                'products',
+                'name',
+                function (Builder $query, $get) {
+                    if (auth()->user()->hasRole('Administrator')) {
+                        $companyId = $get('company_id');
+                        return $query->when(
+                            $companyId,
+                            fn ($q) => $q->where('company_id', $companyId)
+                        );
+                    }
+                    return $query->where('company_id', auth()->user()->company_id);
+                }
+            )
+            ->preload()
+            ->searchable();
 
         return $form->schema($schema);
     }
