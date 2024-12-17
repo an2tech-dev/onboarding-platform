@@ -108,9 +108,9 @@ class FloorResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')->label('Company')->sortable(),
-                TextColumn::make('name')->label('Floor Name')->sortable(),
-                TextColumn::make('floor_number')->label('Floor Number')->sortable(),
+                TextColumn::make('company.name')->label('Company')->sortable()->searchable(),
+                TextColumn::make('name')->label('Floor Name')->sortable()->searchable(),
+                TextColumn::make('floor_number')->label('Floor Number')->sortable()->searchable(),
                 // TextColumn::make('created_at')->label('Created At')->dateTime(),
                 // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
             ])

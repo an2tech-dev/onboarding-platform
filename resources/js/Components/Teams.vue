@@ -1,115 +1,113 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-[#F4EFFC]">
-    <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 flex-1">
-      <!-- Header -->
-      <h1 class="text-xl sm:text-2xl text-gray-800 mb-4">Meet our teams</h1>
+  <div class="flex flex-colbg-[#F4EFFC]">
+    <div class="flex flex-col gap-6 bg-white shadow-lg rounded-lg p-4 sm:p-5 flex-1">
+      <h1 class="text-xl sm:text-2xl text-gray-800">Meet our teams</h1>
 
-      <!-- Floor Navigation -->
-      <div class="flex space-x-4 mb-8">
-        <div
-          v-for="(floor, index) in floors"
-          :key="index"
-          @click="selectFloor(floor)"
-          class="cursor-pointer border rounded-lg p-4 w-1/4 relative"
-          :class="selectedFloor === floor.name ? 'border-purple-400 shadow-md' : 'border-purple-100 hover:shadow-md'"
-        >
-          <h2 class="text-sm sm:text-base text-gray-900">
-            {{ floor.name }}
-          </h2>
-          <p class="text-xs sm:text-sm text-gray-600">
-            {{ floor.teams }} teams
-          </p>
+      <div class="flex flex-col gap-4">
+        <div class="grid gap-3 grid-cols-4">
           <div
-            v-if="selectedFloor === floor.name"
-            class="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-purple-400"
-          ></div>
+            v-for="(floor, index) in floors"
+            :key="index"
+            @click="selectFloor(floor)"
+            class="cursor-pointer pt-1 px-1 pb-2 rounded-xl  relative"
+            :class="selectedFloor?.id === floor.id ? 'bg-[#CEBDFF] shadow-md' : 'bg-[#ECE6EE] hover:shadow-md'"
+          >
+            <div class="bg-white rounded-xl px-2 py-3">
+              <h2 class="text-sm sm:text-base text-gray-900">
+                {{ floor.name }}
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-600">
+                {{ floor.teams ? floor.teams.length : 0 }} teams
+              </p>
+              <div
+                v-if="selectedFloor?.id === floor.id"
+                class="absolute bottom-[-8px] left-1/4 transform -translate-x-1/2 w-[17px] h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-[#CEBDFF]"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="selectedFloor" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          <div
+            v-for="team in selectedFloor.teams"
+            :key="team.id"
+            class="bg-[#F2ECF4] shadow-sm rounded-xl border p-2 hover:shadow-md cursor-pointer"
+            @click="viewTeamDetails(team.name, `Members: ${team.members || 0}`)"
+          >
+            <div class="flex flex-col gap-4">
+              <img
+                :src="team.image || 'https://via.placeholder.com/150'"
+                :alt="team.name"
+                class="object-cover rounded-lg"
+              />
+              <div>
+                <h3 class="text-sm sm:text-base font-semibold text-gray-900">
+                  {{ team.name }}
+                </h3>
+                <p class="text-xs sm:text-sm text-gray-600">
+                  {{ team.members || 0 }} members
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-gray-500 text-center">
+          Select a floor to view teams.
         </div>
       </div>
 
-      <!-- Teams Section -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div
-          v-for="team in teams"
-          :key="team.name"
-          class="bg-white shadow-sm rounded-lg border p-4 hover:shadow-md cursor-pointer"
-          @click="viewTeamDetails(team.name, team.members)"
-        >
-          <div class="flex flex-col">
+      <div class="flex flex-col gap-2">
+        <h2 class="text-lg sm:text-xl text-gray-800">
+          Elevate Your Experience
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            class="flex gap-3 shadow-md bg-[#F2ECF4] p-2 rounded-xl overflow-hidden cursor-pointer"
+            @click="viewExperienceDetails('Gaming Room', 'Our dedicated gaming room is the perfect spot for all gaming enthusiasts.')"
+          >
             <img
-              :src="team.image"
-              :alt="team.name"
-              class="w-32 h-32 object-cover rounded-lg mb-4"
+              src="../../css/images/img5.png"
+              alt="Gaming room"
+              class="min-w-[154px] max-w-[154px] object-cover rounded-xl"
             />
-            <div>
-              <h3 class="text-sm sm:text-base font-semibold text-gray-900 mb-1">
-                {{ team.name }}
+            <div class="flex flex-col justify-center">
+              <h3 class="text-base font-semibold text-gray-800 mb-1">
+                Gaming room
               </h3>
-              <p class="text-xs sm:text-sm text-gray-600">
-                {{ team.members }} members
+              <p class="text-sm text-gray-600">
+                Our dedicated gaming room is the perfect spot for all gaming enthusiasts.
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex gap-3 p-2 bg-[#F2ECF4] shadow-md rounded-xl overflow-hidden cursor-pointer"
+            @click="viewExperienceDetails('Rooftop', 'Our rooftop offers breathtaking views and a vibrant atmosphere for relaxation.')"
+          >
+            <img
+              src="../../css/images/img5.png"
+              alt="Rooftop"
+              class="min-w-[154px] max-w-[154px] object-cover rounded-xl"
+            />
+            <div class="flex flex-col justify-center">
+              <h3 class="text-base font-semibold text-gray-800 mb-1">
+                Rooftop
+              </h3>
+              <p class="text-sm text-gray-600">
+                Our rooftop offers breathtaking views and a vibrant atmosphere for various activities.
               </p>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Elevate Your Experience Section -->
-      <h2 class="text-lg sm:text-xl text-gray-800 mb-4">
-        Elevate Your Experience
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Gaming Room Card -->
-        <div
-          class="flex bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
-          @click="viewExperienceDetails('Gaming Room', 'Our dedicated gaming room is the perfect spot for all gaming enthusiasts.')"
-        >
-          <img
-            src="../../css/images/img5.png"
-            alt="Gaming room"
-            class="w-1/3 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-base font-semibold text-gray-800 mb-1">
-              Gaming room
-            </h3>
-            <p class="text-sm text-gray-600">
-              Our dedicated gaming room is the perfect spot for all gaming enthusiasts.
-            </p>
-          </div>
-        </div>
-
-        <!-- Rooftop Card -->
-        <div
-          class="flex bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
-          @click="viewExperienceDetails('Rooftop', 'Our rooftop offers breathtaking views and a vibrant atmosphere for relaxation.')"
-        >
-          <img
-            src="../../css/images/img5.png"
-            alt="Rooftop"
-            class="w-1/3 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-base font-semibold text-gray-800 mb-1">
-              Rooftop
-            </h3>
-            <p class="text-sm text-gray-600">
-              Our rooftop offers breathtaking views and a vibrant atmosphere for various activities.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
-
-  
     <div v-if="selectedModal" class="fixed inset-0 z-50 flex justify-end">
       <div class="bg-white w-full sm:w-2/3 md:w-[343px] h-full shadow-lg rounded-l-lg flex flex-col z-50">
         <div class="flex items-center justify-between p-4 sm:p-6">
           <h2 class="text-lg sm:text-xl font-bold text-gray-800">
             {{ selectedModal.title }}
           </h2>
-          <button
-            @click="closeModal"
-            class="text-gray-500 focus:outline-none text-2xl"
-          >
+          <button @click="closeModal" class="text-gray-500 focus:outline-none text-2xl">
             ✕
           </button>
         </div>
@@ -124,18 +122,18 @@
   </div>
 </template>
 
-<script>import apiService from "@/services/apiServices";
+<script>
+import apiService from "@/services/apiServices";
 
 export default {
   name: "Teams",
   data() {
     return {
-      selectedModal: null, // Modal for team details
-      selectedFloor: null, // Currently selected floor
-      floors: [], // Floors fetched from the API
-      selectedTeams: [], // Teams of the currently selected floor
-      isLoading: false, // Loading state
-      error: null, // Error state
+      selectedModal: null,
+      selectedFloor: null,
+      floors: [],
+      isLoading: false,
+      error: null,
     };
   },
   methods: {
@@ -144,26 +142,19 @@ export default {
       this.error = null;
 
       try {
-        // Fetch floors with their associated teams from the API
         const response = await apiService.get("api/floors");
         this.floors = response;
-
-        console.log("Fetched Floors with Teams:", this.floors);
-
-        // Set default selected floor and its teams
-        if (this.floors.length > 0) {
-          this.selectFloor(this.floors[0]);
+         if (this.floors.length > 0) {
+          this.selectedFloor = this.floors[0];
         }
       } catch (error) {
-        console.error("Error fetching floors:", error);
         this.error = "Failed to load floors. Please try again later.";
       } finally {
         this.isLoading = false;
       }
     },
     selectFloor(floor) {
-      this.selectedFloor = floor.name;
-      this.selectedTeams = floor.teams; // Update teams for the selected floor
+      this.selectedFloor = floor;
     },
     viewTeamDetails(title, description) {
       this.selectedModal = { title, description };
@@ -173,14 +164,7 @@ export default {
     },
   },
   mounted() {
-    // Fetch floors and teams when the component is mounted
     this.fetchFloorsAndTeams();
   },
 };
 </script>
-
-<style scoped>
-.grid {
-  display: grid;
-}
-</style>

@@ -109,6 +109,8 @@
 
 <script>
 import axios from "axios";
+import apiService from "@/services/apiServices";
+
 
 export default {
   data() {
@@ -121,25 +123,17 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const companyResponse = await axios.get("/api/company", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        
+        const companyResponse = await apiService.get("/api/company");
 
-        this.companies = companyResponse.data.map((company) => ({
+        this.companies = companyResponse.map((company) => ({
           ...company,
           benefits: company.benefits || [], 
         }));
 
-        const productsResponse = await axios.get("/api/products", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const productsResponse = await apiService.get("/api/products");
 
-
-        this.products = productsResponse.data.map((product) => ({
+        this.products = productsResponse.map((product) => ({
           ...product,
         }));
       } catch (error) {
@@ -160,7 +154,6 @@ export default {
         const options = { day: 'numeric', month: 'long', year: 'numeric' }; 
         return new Date(date).toLocaleDateString(undefined, options).replace(",", ""); 
       } catch (error) {
-        console.error("Invalid date format:", date, error);
         return 'N/A'; 
       }
     },
@@ -168,8 +161,6 @@ export default {
 
     viewProductDetails(product) {
       this.selectedProduct = product;
-      // console.log('this.selectedProduct', this.selectedProduct);
-
     },
     closeProductDetails() {
       this.selectedProduct = null;

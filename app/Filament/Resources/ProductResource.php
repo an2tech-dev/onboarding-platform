@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Product;
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Product;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\DateFilter;
+use Filament\Tables\Filters\TextFilter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductResource extends Resource
 {
@@ -76,7 +80,7 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('company.name')->sortable(),
+                TextColumn::make('company.name')->sortable()->searchable(),
                 TextColumn::make('name')
                     ->label('Product Name')
                     ->sortable()
@@ -91,7 +95,18 @@ class ProductResource extends Resource
                     ->sortable(),
                 ImageColumn::make('product_image')->label('Product Image'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('company_id')
+                    ->label('Filter by Company')
+                    ->relationship('company', 'name')
+                    ->searchable()
+                    ->preload(),
+    
+                SelectFilter::make('name')
+                    ->label('Filter by Product Name')
+                    ->options(fn () => Product::pluck('name', 'name')->toArray())
+                    ->searchable(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

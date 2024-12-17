@@ -91,10 +91,10 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->label('Company Name')->sortable(),
-                TextColumn::make('description')->label('Description')->limit(50),
-                TextColumn::make('established')->label('Established')->date(),
-                TextColumn::make('office_size')->label('Office Size (sqft)')->sortable(),
+                TextColumn::make('name')->label('Company Name')->sortable()->searchable(),
+                TextColumn::make('description')->label('Description')->limit(50)->searchable(),
+                TextColumn::make('established')->label('Established')->date()->searchable(),
+                TextColumn::make('office_size')->label('Office Size (sqft)')->sortable()->searchable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
