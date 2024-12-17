@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\UserResource\Pages;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Select;
 
 class UserResource extends Resource
 {
@@ -46,11 +47,13 @@ class UserResource extends Resource
     {
         $schema = [];
 
-        // Only show company selection for Administrators
+        // Company selection for administrators
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Forms\Components\Select::make('company_id')
+            $schema[] = Select::make('company_id')
                 ->relationship('company', 'name')
-                ->required();
+                ->required()
+                ->live()
+                ->afterStateUpdated(fn ($state, callable $set) => $set('team_id', null));
         }
 
         // Basic user fields
@@ -71,25 +74,38 @@ class UserResource extends Resource
             ->dehydrated(fn ($state) => filled($state))
             ->dehydrateStateUsing(fn ($state) => Hash::make($state));
 
-        // Team selection (filtered by company for managers)
-        $schema[] = Forms\Components\Select::make('team_id')
-            ->relationship('team', 'name', function ($query) {
-                if (auth()->user()->hasRole('Manager')) {
+        // Team selection (filtered by selected company)
+        $schema[] = Select::make('team_id')
+            ->relationship(
+                'team',
+                'name',
+                function (Builder $query, $get) {
+                    if (auth()->user()->hasRole('Administrator')) {
+                        $companyId = $get('company_id');
+                        return $query->when(
+                            $companyId,
+                            fn ($q) => $q->where('company_id', $companyId)
+                        );
+                    }
                     return $query->where('company_id', auth()->user()->company_id);
                 }
-                return $query;
-            })
-            ->required();
+            )
+            ->required()
+            ->disabled(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id'))
+            ->helperText(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id') 
+                ? 'Select a company first' 
+                : null);
 
-        // Role selection (managers can only assign Employee role)
+        // Role selection (single role)
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Forms\Components\Select::make('roles')
-                ->multiple()
+            $schema[] = Select::make('role')
                 ->relationship('roles', 'name')
-                ->preload();
+                ->preload()
+                ->required()
+                ->label('Role');
         } else {
-            $schema[] = Forms\Components\Hidden::make('roles')
-                ->default(['Employee']);
+            $schema[] = Forms\Components\Hidden::make('role')
+                ->default('Employee');
         }
 
         return $form->schema($schema);
