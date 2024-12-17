@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model; 
 use App\Filament\Resources\UserResource\Pages;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -23,12 +24,12 @@ class UserResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->hasRole('Administrator');
+        return auth()->user()->hasRole(['Administrator', 'Manager']);
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()->hasRole('Administrator');
+        return auth()->user()->hasRole(['Administrator', 'Manager']);
     }
 
     public static function canEdit(Model $record): bool
@@ -43,68 +44,103 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->label('Name'),
-                Forms\Components\TextInput::make('email')
-                    ->required()
-                    ->email()
-                    ->unique('users', 'email', ignoreRecord: true)
-                    ->label('Email'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->nullable()
-                    ->label('Password')
-                    ->dehydrateStateUsing(fn ($state) => $state ? bcrypt($state) : null)
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->helperText('Leave blank to keep the current password.'),
-                Forms\Components\Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->nullable() 
-                    ->label('Company'),
-                Forms\Components\Select::make('roles') 
-                    ->label('Role')
-                    ->options(Role::all()->pluck('name', 'name')) 
-                    ->relationship('roles', 'name') 
-                    ->required() 
-                    ->disablePlaceholderSelection(),
-                Forms\Components\Select::make('role_information_id')
-                    ->label('Role within company')
-                    ->relationship(
-                        'roleInformation',
-                        'title',
-                        fn (Builder $query) => auth()->user()->hasRole('Administrator') 
-                            ? $query 
-                            : $query->where('company_id', auth()->user()->company_id)
-                    )
-                    ->searchable()
-                    ->preload()
-                    ->nullable(),
-            ]);
+        $schema = [];
+
+        // Only show company selection for Administrators
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Forms\Components\Select::make('company_id')
+                ->relationship('company', 'name')
+                ->required();
+        }
+
+        // Basic user fields
+        $schema[] = Forms\Components\TextInput::make('name')
+            ->required()
+            ->maxLength(255);
+
+        $schema[] = Forms\Components\TextInput::make('email')
+            ->email()
+            ->required()
+            ->maxLength(255)
+            ->unique(ignoreRecord: true);
+
+        $schema[] = Forms\Components\TextInput::make('password')
+            ->password()
+            ->required()
+            ->minLength(8)
+            ->dehydrated(fn ($state) => filled($state))
+            ->dehydrateStateUsing(fn ($state) => Hash::make($state));
+
+        // Team selection (filtered by company for managers)
+        $schema[] = Forms\Components\Select::make('team_id')
+            ->relationship('team', 'name', function ($query) {
+                if (auth()->user()->hasRole('Manager')) {
+                    return $query->where('company_id', auth()->user()->company_id);
+                }
+                return $query;
+            })
+            ->required();
+
+        // Role selection (managers can only assign Employee role)
+        if (auth()->user()->hasRole('Administrator')) {
+            $schema[] = Forms\Components\Select::make('roles')
+                ->multiple()
+                ->relationship('roles', 'name')
+                ->preload();
+        } else {
+            $schema[] = Forms\Components\Hidden::make('roles')
+                ->default(['Employee']);
+        }
+
+        return $form->schema($schema);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Name'),
-                Tables\Columns\TextColumn::make('email')->label('Email'),
-                Tables\Columns\TextColumn::make('company.name')->label('Company'),
-                Tables\Columns\TextColumn::make('roles.name')->label('Role') 
-                    ->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state),
-            //     Tables\Columns\TextColumn::make('created_at')->label('Created At')->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('team.name')
+                    ->label('Team')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('company.name')
+                    ->label('Company')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Role')
+                    ->searchable()
+                    ->sortable(),
+            ])
+            ->filters([
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery();
+        $query = parent::getEloquentQuery();
+        
+        if (auth()->user()->hasRole('Manager')) {
+            return $query->where('company_id', auth()->user()->company_id);
+        }
+        
+        return $query;
     }
 
     public static function getPages(): array
