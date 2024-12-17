@@ -70,6 +70,18 @@ class UserResource extends Resource
                     ->relationship('roles', 'name') 
                     ->required() 
                     ->disablePlaceholderSelection(),
+                Forms\Components\Select::make('role_information_id')
+                    ->label('Role within company')
+                    ->relationship(
+                        'roleInformation',
+                        'title',
+                        fn (Builder $query) => auth()->user()->hasRole('Administrator') 
+                            ? $query 
+                            : $query->where('company_id', auth()->user()->company_id)
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->nullable(),
             ]);
     }
 
