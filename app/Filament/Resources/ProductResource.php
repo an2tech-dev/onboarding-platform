@@ -66,7 +66,9 @@ class ProductResource extends Resource
         $schema[] = Forms\Components\DatePicker::make('release_date')
             ->label('Release Date')
             ->nullable()
-            ->displayFormat('Y-m-d');
+            ->displayFormat('Y-m-d')
+            ->rules(['nullable', 'date'])
+            ->placeholder('Select release date (optional)');
 
         $schema[] = Forms\Components\FileUpload::make('product_image')
             ->label('Product Image')
