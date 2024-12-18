@@ -45,34 +45,31 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $schema = [];
+        $schema = [
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->required()
+                ->maxLength(255),
+
+            Forms\Components\TextInput::make('password')
+                ->password()
+                ->required()
+                ->maxLength(255)
+                ->hiddenOn('edit'),
+        ];
 
         // Company selection for administrators
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Select::make('company_id')
+            $schema[] = Forms\Components\Select::make('company_id')
                 ->relationship('company', 'name')
                 ->required()
                 ->live()
                 ->afterStateUpdated(fn ($state, callable $set) => $set('team_id', null));
         }
-
-        // Basic user fields
-        $schema[] = Forms\Components\TextInput::make('name')
-            ->required()
-            ->maxLength(255);
-
-        $schema[] = Forms\Components\TextInput::make('email')
-            ->email()
-            ->required()
-            ->maxLength(255)
-            ->unique(ignoreRecord: true);
-
-        $schema[] = Forms\Components\TextInput::make('password')
-            ->password()
-            ->required()
-            ->minLength(8)
-            ->dehydrated(fn ($state) => filled($state))
-            ->dehydrateStateUsing(fn ($state) => Hash::make($state));
 
         // Team selection (filtered by selected company)
         $schema[] = Select::make('team_id')
@@ -91,6 +88,28 @@ class UserResource extends Resource
                 }
             )
             ->required()
+            ->disabled(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id'))
+            ->helperText(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id') 
+                ? 'Select a company first' 
+                : null);
+
+        // Role Information selection
+        $schema[] = Select::make('role_information_id')
+            ->relationship(
+                'roleInformation',
+                'title',
+                function (Builder $query, $get) {
+                    if (auth()->user()->hasRole('Administrator')) {
+                        $companyId = $get('company_id');
+                        return $query->when(
+                            $companyId,
+                            fn ($q) => $q->where('company_id', $companyId)
+                        );
+                    }
+                    return $query->where('company_id', auth()->user()->company_id);
+                }
+            )
+            ->label('Role in the company')
             ->disabled(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id'))
             ->helperText(fn ($get) => auth()->user()->hasRole('Administrator') && !$get('company_id') 
                 ? 'Select a company first' 
