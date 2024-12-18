@@ -26,6 +26,7 @@ class TestDataSeeder extends Seeder
             ProductSeeder::class,
             ResourceSeeder::class,
             StakeholderSeeder::class,
+            RoleInformationSeeder::class,
         ]);
     }
 }

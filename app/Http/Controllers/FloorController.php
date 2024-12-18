@@ -26,8 +26,9 @@ class FloorController extends Controller
         }
 
         $floors = Floor::where('company_id', $user->company_id)
-            ->with('teams')
-            ->get();
+        ->with(['teams.products'])
+        ->get();
+
 
         return response()->json($floors, 200);
     }

@@ -1,9 +1,9 @@
 <template>
   <div class="bg-[#F4EFFC]">
-    <div v-for="company in companies" :key="company.id" class="flex justify-center mt-5">
-      <div class="shadow-container flex items-center gap-[10px]">
-        <div class="flex items-center gap-[30px] w-full h-full p-[24px] bg-white border border-[#E7DEF8] rounded-[20px] shadow-lg-custom">
-          <div class="flex items-center justify-center w-[132px] h-[132px] rounded-[16px] bg-[#E7DEF8] p-[34px] gap-[10px]">
+    <div v-for="company in companies" :key="company.id" class="flex justify-center py-4 px-4 max-w-screen-xl mx-auto">
+      <div class="shadow-container flex items-center gap-[10px] w-full">
+        <div class="flex flex-col md:flex-row items-center gap-[30px] w-full h-full p-[24px] bg-white border border-[#E7DEF8] rounded-[20px] shadow-lg-custom">
+          <div class="flex items-center justify-center w-full md:w-[132px] md:h-[132px] rounded-[16px] bg-[#E7DEF8] p-[34px] gap-[10px]">
             <img
               src="../../css/images/Frame1.png"
               alt="Welcome Icon"
@@ -57,8 +57,6 @@ body {
 }
 
 .shadow-container {
-  width: 1128px;
-  height: 194px;
   padding: 4px 4px 10px 4px;
   border-radius: 28px 28px 30px 30px;
   background-color: #E6E1E9;

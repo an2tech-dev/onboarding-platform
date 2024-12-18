@@ -2,18 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Team;
-use App\Models\Company;
 use Filament\Forms;
+use App\Models\Team;
 use Filament\Tables;
-use Filament\Resources\Resource;
+use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TeamResource\Pages;
 
 class TeamResource extends Resource
@@ -64,6 +65,10 @@ class TeamResource extends Resource
             ->required()
             ->label('Team Name')
             ->placeholder('Enter team name');
+        
+        $schema[] = Textarea::make('description')
+            ->label('Description')
+            ->placeholder('Enter team description (optional)');
 
         $schema[] = Select::make('products')
             ->multiple()

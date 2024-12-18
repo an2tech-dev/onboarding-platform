@@ -50,28 +50,31 @@ class FloorResource extends Resource
         $schema = [];
 
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Forms\Components\Select::make('company_id')
+            $schema[] = Select::make('company_id')
                 ->relationship('company', 'name')
-                ->required();
+                ->required()
+                ->afterStateUpdated(function ($state, $set) {
+                    $set('teams', []);
+                });
         }
 
-        $schema[] = Forms\Components\TextInput::make('name')
+        $schema[] = TextInput::make('name')
             ->required()
             ->maxLength(255);
 
-        $schema[] = Forms\Components\TextInput::make('floor_number')
+        $schema[] = TextInput::make('floor_number')
             ->required()
             ->numeric();
 
-        $schema[] = Forms\Components\Select::make('teams')
+        $schema[] = Select::make('teams')
             ->multiple()
-            ->relationship(
-                'teams',
-                'name',
-                fn (Builder $query) => auth()->user()->hasRole('Administrator') 
-                    ? $query 
-                    : $query->where('company_id', auth()->user()->company_id)
-            )
+            ->relationship('teams', 'name', function (Builder $query, $get) {
+                $companyId = $get('company_id');
+                if ($companyId) {
+                    $query->where('company_id', $companyId);
+                }
+                return $query;
+            })
             ->preload()
             ->searchable()
             ->afterStateHydrated(function ($state, $set, $record) {

@@ -21,6 +21,7 @@ class TeamFactory extends Factory
         return [
             'name' => $this->faker->word() . ' Team',
             'company_id' => Company::factory(),
+            'description' => $this->faker->sentence(),
         ];
     }
 }

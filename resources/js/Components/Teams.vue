@@ -4,7 +4,7 @@
       <h1 class="text-xl sm:text-2xl text-gray-800">Meet our teams</h1>
 
       <div class="flex flex-col gap-4">
-        <div class="grid gap-3 grid-cols-4">
+        <div class="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           <div
             v-for="(floor, index) in floors"
             :key="index"
@@ -32,7 +32,7 @@
             v-for="team in selectedFloor.teams"
             :key="team.id"
             class="bg-[#F2ECF4] shadow-sm rounded-xl border p-2 hover:shadow-md cursor-pointer"
-            @click="viewTeamDetails(team.name, `Members: ${team.members || 0}`)"
+            @click="viewTeamDetails(team)"
           >
             <div class="flex flex-col gap-4">
               <img
@@ -45,7 +45,7 @@
                   {{ team.name }}
                 </h3>
                 <p class="text-xs sm:text-sm text-gray-600">
-                  {{ team.members || 0 }} members
+                  {{ team?.members ? team?.members?.length : 0 }} members
                 </p>
               </div>
             </div>
@@ -102,19 +102,63 @@
       </div>
     </div>
     <div v-if="selectedModal" class="fixed inset-0 z-50 flex justify-end">
-      <div class="bg-white w-full sm:w-2/3 md:w-[343px] h-full shadow-lg rounded-l-lg flex flex-col z-50">
-        <div class="flex items-center justify-between p-4 sm:p-6">
-          <h2 class="text-lg sm:text-xl font-bold text-gray-800">
-            {{ selectedModal.title }}
-          </h2>
-          <button @click="closeModal" class="text-gray-500 focus:outline-none text-2xl">
+      <div class="bg-white w-full sm:w-2/3 md:w-[455px] h-full shadow-lg rounded-l-lg flex flex-col gap-6 z-50 p-4 overflow-y-auto">
+        <div class="w-full">
+          <button @click="closeModal" class="absolute text-gray-500 focus:outline-none text-2xl">
             ✕
           </button>
+          <img
+            :src="selectedModal.image || 'https://via.placeholder.com/150'"
+            :alt="selectedModal.name"
+            class="object-cover rounded-lg w-full max-h-[218px]"
+          />
+          
         </div>
-        <div class="p-4 sm:p-6">
-          <p class="text-sm sm:text-base text-gray-600 mb-6">
-            {{ selectedModal.description }}
-          </p>
+        <div class="flex flex-col gap-6">
+          <h2 class="text-2xl font-normal text-[#1F1048]">
+            {{ selectedModal.name }}
+          </h2>
+
+          <div class="flex flex-col gap-2">
+            <p class="text-[#1F1048] font-medium text-base">
+              Description
+            </p>
+            <span v-if="selectedModal.description" class="text-[#1F1048] font-normal text-sm">
+              {{ selectedModal.description }}
+            </span>
+            <p v-else class="text-gray-500 text-sm">No description available.</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <p class="font-medium text-base text-[#1F1048]">
+              Active members
+            </p>
+            <span v-if="selectedModal.members && selectedModal.members.length > 0" class="font-normal text-sm text-[#1F1048]">
+              {{ selectedModal.members.length }} members
+            </span>
+            <p v-else class="text-gray-500 text-sm">No active members</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <p class="text-[#1F1048] font-medium text-base">Current Projects</p>
+            <div v-if="selectedModal.products.length > 0" class="flex flex-wrap gap-2">
+              <div class="pt-2 pb-3 px-1 bg-[#CAC4CF] rounded-lg" v-for="product in selectedModal.products" :key="product.id">
+                <span class="bg-white px-3 py-2 rounded-lg">
+                  {{ product.name }}
+                </span>
+              </div>
+            </div>
+            <p v-else class="text-gray-500">There are no current projects assigned.</p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div class="flex justify-between items-center px-6 py-6 bg-[#F7F2FA] rounded-xl" v-for="member in selectedModal.members" :key="member.id">
+                <div>
+                  <p>{{ member.name }}</p>
+                  <span>{{ member.email }}</span>
+                </div>
+                <span class="px-2 py-2 bg-[#E8DDFF] text-[#1F1048] rounded">
+                  {{ member.team_role }}
+                </span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="fixed inset-0 bg-[#F4EFFC] bg-opacity-70 z-40" @click="closeModal"></div>
@@ -143,6 +187,8 @@ export default {
 
       try {
         const response = await apiService.get("api/floors");
+        const teams = await apiService.get("api/teams");
+        console.log(response);
         this.floors = response;
          if (this.floors.length > 0) {
           this.selectedFloor = this.floors[0];
@@ -156,8 +202,8 @@ export default {
     selectFloor(floor) {
       this.selectedFloor = floor;
     },
-    viewTeamDetails(title, description) {
-      this.selectedModal = { title, description };
+    viewTeamDetails(team) {
+      this.selectedModal = team;
     },
     closeModal() {
       this.selectedModal = null;

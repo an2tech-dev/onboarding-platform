@@ -20,7 +20,7 @@ class Product extends Model
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class)->withTimestamps();
+        return $this->belongsToMany(Team::class, 'product_team');
     }
 
     public function getImageAttribute()
