@@ -5,18 +5,41 @@ namespace App\Filament\Resources;
 use App\Models\Resource as ResourceModel;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\ResourceResource\Pages;
+
 
 class ResourceResource extends Resource
 {
     protected static ?string $model = ResourceModel::class;
+    protected static ?string $navigationIcon = 'heroicon-o-code-bracket-square';
+    protected static ?string $navigationGroup = 'Information';
 
-    protected static ?string $navigationLabel = 'Resources';
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Manager');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Manager');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasRole('Administrator') || 
+               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->company_id);
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasRole('Administrator') || 
+               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->company_id);
+    }
 
     public static function form(Form $form): Form
     {
@@ -25,21 +48,15 @@ class ResourceResource extends Resource
         if (auth()->user()->hasRole('Administrator')) {
             $schema[] = Forms\Components\Select::make('company_id')
                 ->relationship('company', 'name')
-                ->required()
-                ->label('Company');
-        } else {
-            $schema[] = Forms\Components\Select::make('company_id')
-                ->options([
-                    auth()->user()->company_id => auth()->user()->company->name 
-                ])
-                ->required()
-                ->label('Company')
-                ->default(auth()->user()->company_id); 
+                ->required();
         }
+
+        $schema[] = Forms\Components\TextInput::make('categories');
 
         $schema[] = Forms\Components\TextInput::make('categories')
             ->required()
-            ->label('Categories');
+            ->label('Categories')
+            ->maxLength(255);
 
         $schema[] = Forms\Components\TextInput::make('title')
             ->required()
@@ -52,7 +69,8 @@ class ResourceResource extends Resource
         $schema[] = Forms\Components\TextInput::make('url')
             ->url()
             ->required()
-            ->label('Resource URL');
+            ->label('Resource URL')
+            ->maxLength(255);
 
         return $form->schema($schema);
     }
@@ -61,28 +79,17 @@ class ResourceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company.name')
-                    ->label('Company')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('categories')
-                    ->label('Categories')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('title')
-                    ->label('Title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('url')
-                    ->label('Resource URL')
-                    ->searchable(),
+                TextColumn::make('company.name')->sortable(),
+                TextColumn::make('categories')->sortable()->searchable(),
+                TextColumn::make('title')->sortable(),
+                TextColumn::make('description')->sortable(),
+                TextColumn::make('url')->sortable(),
             ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
-            ->filters([])
-            ->searchable();
+            ]);
     }
 
     public static function getEloquentQuery(): Builder
@@ -97,9 +104,9 @@ class ResourceResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListResources::route('/'),
-            'create' => Pages\CreateResource::route('/create'),
-            'edit' => Pages\EditResource::route('/{record}/edit'),
+            'index' => ResourceResource\Pages\ListResources::route('/'),
+            'create' => ResourceResource\Pages\CreateResource::route('/create'),
+            'edit' => ResourceResource\Pages\EditResource::route('/{record}/edit'),
         ];
     }
 }

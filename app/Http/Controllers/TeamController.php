@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
-use App\Models\Floor;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 
@@ -16,26 +15,32 @@ class TeamController extends Controller
 
     public function index()
     {
-        if (auth()->user()->hasRole('Administrator')) {
-            return response()->json(Team::all());
-        } else {
-            return response()->json(Team::whereHas('floor', function ($query) {
-                $query->where('company_id', auth()->user()->company_id);
-            })->get());
+        if (!auth()->check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
         }
+
+        $user = auth()->user();
+
+        if (!$user->company_id) {
+            return response()->json(['message' => 'User is not associated with any company'], 404);
+        }
+
+        $teams = Team::where('company_id', auth()->user()->company_id)->get();
+
+        return response()->json($teams, 200);
     }
 
     public function store(StoreTeamRequest $request)
     {
         $data = $request->validated();
         
-        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($data['floor_id'])) {
-            return response()->json(['error' => 'Unauthorized to create a team for this floor'], 403);
+        if (auth()->user()->hasRole('Manager')) {
+            $data['company_id'] = auth()->user()->company_id;
         }
 
         try {
             $team = Team::create($data);
-            return response()->json(['message' => 'Team created successfully!', 'team' => $team], 201); 
+            return response()->json(['message' => 'Team created successfully!', 'team' => $team], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Team could not be created'], 500);
         }
@@ -46,7 +51,7 @@ class TeamController extends Controller
         $data = $request->validated();
         $team = Team::findOrFail($id);
 
-        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->id)) {
+        if (auth()->user()->hasRole('Manager') && $team->company_id !== auth()->user()->company_id) {
             return response()->json(['error' => 'Unauthorized to update this team'], 403);
         }
 
@@ -62,7 +67,7 @@ class TeamController extends Controller
     {
         $team = Team::findOrFail($id);
 
-        if (auth()->user()->hasRole('Manager') && !$this->isValidCompany($team->floor->id)) {
+        if (auth()->user()->hasRole('Manager') && $team->company_id !== auth()->user()->company_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -72,12 +77,5 @@ class TeamController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Team could not be deleted'], 500);
         }
-    }
-
-    private function isValidCompany($floorId)
-    {
-        $floor = Floor::find($floorId);
-        
-        return $floor && $floor->company_id == auth()->user()->company_id;
     }
 }

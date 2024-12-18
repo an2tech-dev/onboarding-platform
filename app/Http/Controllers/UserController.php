@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -11,16 +12,20 @@ class UserController extends Controller
 {
     public function index()
     {
-        if (!Auth::user()->hasRole('Administrator')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (Auth::user()->hasRole('Administrator')) {
+            return response()->json(User::all());
         }
 
-        return response()->json(User::all());
+        if (Auth::user()->hasRole('Manager')) {
+            return response()->json(User::where('company_id', Auth::user()->company_id)->get());
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 403);
     }
 
     public function store(Request $request)
     {
-        if (!Auth::user()->hasRole('Administrator')) {
+        if (!Auth::user()->hasRole(['Administrator', 'Manager'])) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -28,43 +33,63 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
+            'team_id' => 'required|exists:teams,id',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        // If manager, validate team belongs to their company
+        if (Auth::user()->hasRole('Manager')) {
+            $team = Team::find($validated['team_id']);
+            if ($team->company_id !== Auth::user()->company_id) {
+                return response()->json(['error' => 'Unauthorized to assign user to this team'], 403);
+            }
+            $validated['company_id'] = Auth::user()->company_id;
+        }
 
+        $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
+
+        // Assign role based on creator
+        if (Auth::user()->hasRole('Manager')) {
+            $user->assignRole('Employee');
+        } else {
+            if ($request->has('roles')) {
+                $user->syncRoles($request->roles);
+            }
+        }
+
         return response()->json($user, 201);
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (Auth::user()->hasRole('Manager') && $user->company_id !== Auth::user()->company_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        return response()->json($user);
     }
 
     public function update(Request $request, $id)
     {
-        if (!Auth::user()->hasRole('Administrator')) {
+        $user = User::findOrFail($id);
+
+        if (Auth::user()->hasRole('Manager') && $user->company_id !== Auth::user()->company_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $user = User::findOrFail($id);
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
-        ]);
-
-        if ($request->has('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-        return response()->json($user);
+        // Add your update logic here
     }
 
     public function destroy($id)
     {
-        if (!Auth::user()->hasRole('Administrator')) {
+        $user = User::findOrFail($id);
+
+        if (Auth::user()->hasRole('Manager') && $user->company_id !== Auth::user()->company_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $user = User::findOrFail($id);
         $user->delete();
         return response()->json(null, 204);
     }

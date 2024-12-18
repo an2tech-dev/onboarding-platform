@@ -3,26 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Models\Process;
-use App\Models\Company;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use App\Filament\Resources\ProcessResource\Pages;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\FileUpload;
 
 class ProcessResource extends Resource
 {
     protected static ?string $model = Process::class;
-
-    protected static ?string $navigationLabel = 'Processes';
-    protected static ?string $navigationIcon = 'heroicon-o-cog'; 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Information';
 
     public static function canViewAny(): bool
     {
@@ -51,27 +47,85 @@ class ProcessResource extends Resource
         $schema = [];
 
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Select::make('company_id')
-                ->relationship('company', 'name') 
-                ->required()
-                ->label('Company');
-        } else {
-            $schema[] = Select::make('company_id')
-                ->options([
-                    auth()->user()->company_id => auth()->user()->company->name 
-                ])
-                ->required()
-                ->label('Company')
-                ->default(auth()->user()->company_id); 
+            $schema[] = Forms\Components\Select::make('company_id')
+                ->relationship('company', 'name')
+                ->required();
         }
 
-        $schema[] = TextInput::make('name')
+        $schema[] = Forms\Components\TextInput::make('name')
             ->required()
-            ->label('Process Name');
+            ->maxLength(255);
 
-        $schema[] = Textarea::make('description')
+        $schema[] = Forms\Components\Select::make('type')
+            ->options([
+                'workflow' => 'Workflow',
+                'information' => 'Information'
+            ])
             ->required()
-            ->label('Description');
+            ->default('workflow')
+            ->live();
+
+        $schema[] = Forms\Components\TextInput::make('description')
+            ->required()
+            ->maxLength(255);
+
+        $schema[] = Repeater::make('workflow_data')
+            ->schema([
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('description')
+                    ->required(),
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('workflow-images')
+                    ->visibility('public')
+                    ->maxSize(5120)
+            ])
+            ->columns(1)
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'workflow')
+            ->defaultItems(1)
+            ->addActionLabel('Add Workflow Step')
+            ->collapsible()
+            ->cloneable()
+            ->columnSpanFull()
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null);
+
+        $schema[] = Repeater::make('information_data')
+            ->schema([
+                Forms\Components\TextInput::make('title')
+                    ->nullable(),
+                Forms\Components\Textarea::make('information')
+                    ->nullable(),
+                Forms\Components\Toggle::make('has_schedule')
+                    ->label('Enable Schedule')
+                    ->default(false)
+                    ->live(),
+                Forms\Components\TextInput::make('schedule_title')
+                    ->nullable()
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_schedule')),
+                Forms\Components\Textarea::make('schedule_text')
+                    ->nullable()
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_schedule')),
+                Forms\Components\Toggle::make('has_image')
+                    ->label('Enable Image')
+                    ->default(false)
+                    ->live(),
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('information-images')
+                    ->visibility('public')
+                    ->maxSize(5120)
+                    ->hidden(fn (Forms\Get $get): bool => !$get('has_image'))
+            ])
+            ->columns(1)
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'information')
+            ->defaultItems(1)
+            ->addActionLabel('Add Information')
+            ->collapsible()
+            ->cloneable()
+            ->columnSpanFull()
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Information Item');
 
         return $form->schema($schema);
     }
@@ -80,12 +134,21 @@ class ProcessResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')->label('Company Name')->sortable(),
-                TextColumn::make('name')->label('Process Name')->sortable(),
-                TextColumn::make('description'),
+                TextColumn::make('company.name')->sortable(),
+                TextColumn::make('name')->sortable(),
+                TextColumn::make('type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'workflow' => 'success',
+                        'information' => 'info',
+                        default => 'gray',
+                    }),
+                TextColumn::make('description')->sortable(),
             ])
-            ->filters([
+            ->filters([])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ]);
     }
 
@@ -101,9 +164,9 @@ class ProcessResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcesses::route('/'),
-            'create' => Pages\CreateProcess::route('/create'),
-            'edit' => Pages\EditProcess::route('/{record}/edit'),
+            'index' => ProcessResource\Pages\ListProcesses::route('/'),
+            'create' => ProcessResource\Pages\CreateProcess::route('/create'),
+            'edit' => ProcessResource\Pages\EditProcess::route('/{record}/edit'),
         ];
     }
 }

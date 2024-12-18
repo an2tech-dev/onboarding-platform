@@ -9,14 +9,23 @@ class UpdateTeamRequest extends FormRequest
 {
     public function authorize()
     {
-        return auth()->user()->can('update team');
+        $team = Team::find($this->route('id'));
+
+        if (!$team) {
+            return false;
+        }
+
+        if (auth()->user()->hasRole('Administrator')) {
+            return true;
+        }
+
+        return auth()->user()->hasRole('Manager') && auth()->user()->company_id === $team->company_id;
     }
 
     public function rules()
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'members_count' => 'sometimes|required|integer',
+            'name' => 'required|string|max:255',
         ];
     }
 }

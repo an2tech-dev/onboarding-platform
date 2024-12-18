@@ -25,8 +25,8 @@ class TestDataSeeder extends Seeder
             ProcessSeeder::class,
             ProductSeeder::class,
             ResourceSeeder::class,
-            ScheduleSeeder::class,
             StakeholderSeeder::class,
+            RoleInformationSeeder::class,
         ]);
     }
 }

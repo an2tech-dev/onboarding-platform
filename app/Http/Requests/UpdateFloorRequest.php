@@ -23,7 +23,9 @@ class UpdateFloorRequest extends FormRequest
         return [
             'name' => 'sometimes|required|string|max:255',
             'floor_number' => 'sometimes|required|integer',
-            'company_id' => 'sometimes|required|exists:company,id', 
+            'company_id' => 'sometimes|required|exists:company,id',
+            'teams' => 'nullable|array',
+            'teams.*' => 'exists:teams,id'
         ];
     }
 }

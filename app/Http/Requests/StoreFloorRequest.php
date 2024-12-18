@@ -14,9 +14,20 @@ class StoreFloorRequest extends FormRequest
     public function rules()
     {
         return [
-            'company_id' => 'required|exists:company,id',
             'name' => 'required|string|max:255',
             'floor_number' => 'required|integer',
+            'company_id' => auth()->user()->hasRole('Administrator') ? 'required|exists:company,id' : 'sometimes',
+            'teams' => 'nullable|array',
+            'teams.*' => 'exists:teams,id'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if (auth()->user()->hasRole('Manager')) {
+            $this->merge([
+                'company_id' => auth()->user()->company_id,
+            ]);
+        }
     }
 }

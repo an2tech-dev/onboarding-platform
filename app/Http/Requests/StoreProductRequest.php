@@ -16,7 +16,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'release_date' => 'required|date',
+            'release_date' => 'nullable|date',
             'product_image' => 'nullable|image|max:2048',
             'company_id' => 'required|exists:company,id',
         ];

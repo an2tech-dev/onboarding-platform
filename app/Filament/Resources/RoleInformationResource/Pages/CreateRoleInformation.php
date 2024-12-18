@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\FloorResource\Pages;
+namespace App\Filament\Resources\RoleInformationResource\Pages;
 
-use App\Filament\Resources\FloorResource;
+use App\Filament\Resources\RoleInformationResource;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateFloor extends CreateRecord
+class CreateRoleInformation extends CreateRecord
 {
-    protected static string $resource = FloorResource::class;
+    protected static string $resource = RoleInformationResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
@@ -17,4 +17,4 @@ class CreateFloor extends CreateRecord
         
         return $data;
     }
-}
+} 

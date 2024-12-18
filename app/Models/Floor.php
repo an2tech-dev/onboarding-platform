@@ -18,7 +18,23 @@ class Floor extends Model
 
     public function teams()
     {
-        return $this->hasMany(Team::class);
+        return $this->belongsToMany(Team::class)->withTimestamps();
     }
 
+    protected static function booted()
+    {
+        static::saved(function ($floor) {
+            if (request()->has('teams')) {
+                $teamIds = request()->get('teams');
+                // Update all selected teams to point to this floor
+                Team::whereIn('id', $teamIds)
+                    ->update(['floor_id' => $floor->id]);
+                
+                // Remove floor_id from unselected teams that were previously assigned to this floor
+                Team::where('floor_id', $floor->id)
+                    ->whereNotIn('id', $teamIds)
+                    ->update(['floor_id' => null]);
+            }
+        });
+    }
 }
