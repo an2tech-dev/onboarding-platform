@@ -15,6 +15,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CompanyResource\Pages; 
+use Filament\Forms\Components\Select;
 
 class CompanyResource extends Resource
 {
@@ -22,6 +23,7 @@ class CompanyResource extends Resource
 
     protected static ?string $navigationLabel = 'Companies';
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function canViewAny(): bool
     {
@@ -61,40 +63,26 @@ class CompanyResource extends Resource
                     ->nullable()
                     ->displayFormat('Y-m-d'),
 
-                TextInput::make('team_members')
-                    ->label('Number of Team Members')
-                    ->numeric()
-                    ->minValue(1)
-                    ->nullable(),
-
                 TextInput::make('office_size')
                     ->label('Office Size (sqft)')
                     ->numeric()
                     ->minValue(1)
                     ->nullable(),
 
-                TextInput::make('floors')
-                    ->label('Floors')
-                    ->nullable(),
-                Repeater::make('benefits')
-                ->label('Benefits')
-                ->schema([
-                    TextInput::make('benefit')
-                        ->label('Benefit')
-                        ->required(),
-                ])
-                ->columns(1)
-                ->nullable()
-                ->afterStateHydrated(function ($state, $set) {
-                    // Convert flat array of strings to objects for display in Repeater
-                    if (is_array($state)) {
-                        $set('benefits', collect($state)->map(fn ($benefit) => ['benefit' => $benefit])->toArray());
-                    }
-                })
-                ->mutateDehydratedStateUsing(function ($state) {
-                    // Convert array of objects back to flat array of strings for storage
-                    return collect($state)->pluck('benefit')->toArray();
-                })
+                Select::make('benefits')
+                    ->multiple()
+                    ->options([
+                        'Health Insurance' => 'Health Insurance',
+                        'Paid Time Off' => 'Paid Time Off',
+                        'Flexible Hours' => 'Flexible Hours',
+                        'Gym Membership' => 'Gym Membership',
+                        'Retirement Plan' => 'Retirement Plan',
+                        'Remote Work' => 'Remote Work',
+                        'Professional Development' => 'Professional Development'
+                    ])
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
             ]);
     }
 
@@ -103,12 +91,10 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->label('Company Name')->sortable(),
-                TextColumn::make('description')->label('Description')->limit(50),
-                TextColumn::make('established')->label('Established')->date(),
-                TextColumn::make('team_members')->label('Team Members')->sortable(),
-                TextColumn::make('office_size')->label('Office Size (sqft)')->sortable(),
-                TextColumn::make('floors')->label('Floors')->limit(50), 
+                TextColumn::make('name')->label('Company Name')->sortable()->searchable(),
+                TextColumn::make('description')->label('Description')->limit(50)->searchable(),
+                TextColumn::make('established')->label('Established')->date()->searchable(),
+                TextColumn::make('office_size')->label('Office Size (sqft)')->sortable()->searchable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

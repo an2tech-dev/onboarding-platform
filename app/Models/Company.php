@@ -10,11 +10,11 @@ class Company extends Model
     use HasFactory;
     protected $table = 'company'; 
 
-    protected $fillable = ['name', 'description', 'established', 'team_members', 'office_size' ,'floors', 'benefits'];
+    protected $fillable = ['name', 'description', 'established', 'office_size', 'benefits'];
 
     protected $casts = [
         'established' => 'date',
-        'benefits' => 'array',
+        'benefits' => 'array'
     ];
 
     public function products()
@@ -40,11 +40,6 @@ class Company extends Model
     public function processes()
     {
         return $this->hasMany(Process::class);
-    }
-
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
     }
    
     public function resources()

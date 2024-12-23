@@ -40,21 +40,12 @@ class RolePermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'update team']);
         Permission::firstOrCreate(['name' => 'delete team']);
 
+        // Resource Permissions
+        Permission::firstOrCreate(['name' => 'create resource']);
+        Permission::firstOrCreate(['name' => 'view resource']);
+        Permission::firstOrCreate(['name' => 'update resource']);
+        Permission::firstOrCreate(['name' => 'delete resource']);
 
-        // Schedule Permissions
-        Permission::firstOrCreate(['name' => 'create schedule']);
-        Permission::firstOrCreate(['name' => 'view schedule']);
-        Permission::firstOrCreate(['name' => 'update schedule']);
-        Permission::firstOrCreate(['name' => 'delete schedule']);
-
-         // Resource Permissions
-         Permission::firstOrCreate(['name' => 'create resource']);
-         Permission::firstOrCreate(['name' => 'view resource']);
-         Permission::firstOrCreate(['name' => 'update resource']);
-         Permission::firstOrCreate(['name' => 'delete resource']);
- 
-
-    
         // Roles
         $admin = Role::firstOrCreate(['name' => 'Administrator']);
         $manager = Role::firstOrCreate(['name' => 'Manager']);
@@ -83,10 +74,6 @@ class RolePermissionSeeder extends Seeder
             'view team',
             'update team',
             'delete team',
-            'create schedule',
-            'view schedule',
-            'update schedule',
-            'delete schedule',
             'create resource',
             'view resource',
             'update resource',
@@ -111,10 +98,6 @@ class RolePermissionSeeder extends Seeder
             'create team',
             'update team',
             'view team',
-            'create schedule',
-            'view schedule',
-            'update schedule',
-            'delete schedule',
             'create resource',
             'view resource',
             'update resource',

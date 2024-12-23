@@ -16,12 +16,9 @@ class StoreCompanyRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'established' => 'required|date',
-            'team_members' => 'required|integer',
-            'office_size' => 'required|integer',
-            'floors' => 'nullable|string|max:255', 
-            'benefits' => 'nullable|string|max:255',
-
+            'established' => 'nullable|date',
+            'office_size' => 'nullable|integer',
+            'benefits' => 'nullable|array',
         ];
     }
 }

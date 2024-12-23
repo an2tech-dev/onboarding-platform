@@ -20,7 +20,8 @@ class FloorResource extends Resource
     protected static ?string $model = Floor::class;
 
     protected static ?string $navigationLabel = 'Floors';
-    protected static ?string $navigationIcon = 'heroicon-o-home'; 
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static ?string $navigationGroup = 'General';
 
     public static function canViewAny(): bool
     {
@@ -52,27 +53,57 @@ class FloorResource extends Resource
             $schema[] = Select::make('company_id')
                 ->relationship('company', 'name')
                 ->required()
-                ->label('Company');
-        } else {
-            $schema[] = Select::make('company_id')
-                ->options([
-                    auth()->user()->company_id => auth()->user()->company->name 
-                ])
-                ->required()
-                ->label('Company')
-                ->default(auth()->user()->company_id); 
+                ->afterStateUpdated(function ($state, $set) {
+                    $set('teams', []);
+                });
         }
 
         $schema[] = TextInput::make('name')
             ->required()
-            ->label('Floor Name');
+            ->maxLength(255);
 
         $schema[] = TextInput::make('floor_number')
-            ->numeric()
             ->required()
-            ->label('Floor Number');
+            ->numeric();
+
+        $schema[] = Select::make('teams')
+            ->multiple()
+            ->relationship('teams', 'name', function (Builder $query, $get) {
+                $companyId = $get('company_id');
+                if ($companyId) {
+                    $query->where('company_id', $companyId);
+                }
+                return $query;
+            })
+            ->preload()
+            ->searchable()
+            ->afterStateHydrated(function ($state, $set, $record) {
+                if ($record) {
+                    $set('teams', $record->teams->pluck('id')->toArray());
+                }
+            });
 
         return $form->schema($schema);
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $user = auth()->user();
+        \Log::info('Creating floor with user:', [
+            'user_id' => $user->id,
+            'company_id' => $user->company_id,
+            'is_manager' => $user->hasRole('Manager'),
+            'data' => $data
+        ]);
+
+        if ($user->hasRole('Manager')) {
+            if (!$user->company_id) {
+                \Log::warning('Manager has no company_id assigned');
+            }
+            $data['company_id'] = $user->company_id;
+        }
+
+        return $data;
     }
 
     public static function table(Table $table): Table
@@ -80,9 +111,9 @@ class FloorResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('company.name')->label('Company')->sortable(),
-                TextColumn::make('name')->label('Floor Name')->sortable(),
-                TextColumn::make('floor_number')->label('Floor Number')->sortable(),
+                TextColumn::make('company.name')->label('Company')->sortable()->searchable(),
+                TextColumn::make('name')->label('Floor Name')->sortable()->searchable(),
+                TextColumn::make('floor_number')->label('Floor Number')->sortable()->searchable(),
                 // TextColumn::make('created_at')->label('Created At')->dateTime(),
                 // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
             ])

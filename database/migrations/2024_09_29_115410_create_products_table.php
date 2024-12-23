@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
             $table->string('name');
             $table->text('description');
-            $table->date('release_date');
+            $table->date('release_date')->nullable();
             $table->string('product_image')->nullable(); 
             $table->timestamps();
         });

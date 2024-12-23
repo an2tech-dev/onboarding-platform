@@ -27,7 +27,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
-            'release_date' => 'sometimes|required|date',
+            'release_date' => 'nullable|date',
             'product_image' => 'nullable|image|max:2048',
             'company_id' => 'sometimes|required|exists:company,id', 
         ];

@@ -2,18 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Team;
-use App\Models\Floor;
 use Filament\Forms;
+use App\Models\Team;
 use Filament\Tables;
-use Filament\Resources\Resource;
+use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TeamResource\Pages;
 
 class TeamResource extends Resource
@@ -22,6 +23,7 @@ class TeamResource extends Resource
 
     protected static ?string $navigationLabel = 'Teams';
     protected static ?string $navigationIcon = 'heroicon-o-users'; 
+    protected static ?string $navigationGroup = 'General';
 
     public static function canViewAny(): bool
     {
@@ -36,13 +38,13 @@ class TeamResource extends Resource
     public static function canEdit(Model $record): bool
     {
         return auth()->user()->hasRole('Administrator') || 
-               (auth()->user()->hasRole('Manager') && $record->floor && auth()->user()->company_id === $record->floor->company_id);
+               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->company_id);
     }
 
     public static function canDelete(Model $record): bool
     {
         return auth()->user()->hasRole('Administrator') || 
-            (auth()->user()->hasRole('Manager') && $record->floor && auth()->user()->company_id === $record->floor->company_id);
+               (auth()->user()->hasRole('Manager') && auth()->user()->company_id === $record->company_id);
     }
 
     public static function form(Form $form): Form
@@ -50,27 +52,42 @@ class TeamResource extends Resource
         $schema = [];
 
         if (auth()->user()->hasRole('Administrator')) {
-            $schema[] = Select::make('floor_id')
-                ->relationship('floor', 'name')
+            $schema[] = Select::make('company_id')
+                ->relationship('company', 'name')
                 ->required()
-                ->label('Floor')
-                ->searchable();
-        } else {
-            $schema[] = Select::make('floor_id')
-                ->options(
-                    Floor::where('company_id', auth()->user()->company_id)
-                        ->pluck('name', 'id') 
-                        ->toArray() 
-                )
-                ->required()
-                ->label('Floor')
-                ->searchable();
+                ->label('Company')
+                ->searchable()
+                ->live()
+                ->afterStateUpdated(fn ($state, callable $set) => $set('products', []));
         }
 
         $schema[] = TextInput::make('name')
             ->required()
             ->label('Team Name')
             ->placeholder('Enter team name');
+        
+        $schema[] = Textarea::make('description')
+            ->label('Description')
+            ->placeholder('Enter team description (optional)');
+
+        $schema[] = Select::make('products')
+            ->multiple()
+            ->relationship(
+                'products',
+                'name',
+                function (Builder $query, $get) {
+                    if (auth()->user()->hasRole('Administrator')) {
+                        $companyId = $get('company_id');
+                        return $query->when(
+                            $companyId,
+                            fn ($q) => $q->where('company_id', $companyId)
+                        );
+                    }
+                    return $query->where('company_id', auth()->user()->company_id);
+                }
+            )
+            ->preload()
+            ->searchable();
 
         return $form->schema($schema);
     }
@@ -80,18 +97,15 @@ class TeamResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('floor.name')->label('Floor')->sortable(),
-                TextColumn::make('name')->label('Team Name')->sortable(),
-                TextColumn::make('members_count')->label('Members Count')->sortable(),
-                // TextColumn::make('created_at')->label('Created At')->dateTime(),
-                // TextColumn::make('updated_at')->label('Updated At')->dateTime(),
+                TextColumn::make('company.name')->label('Company')->sortable()->searchable(),
+                TextColumn::make('name')->label('Team Name')->sortable()->searchable(),
+                TextColumn::make('created_at')->label('Created At')->dateTime()->sortable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->filters([
-            ]);
+            ->filters([]);
     }
 
     public static function getEloquentQuery(): Builder
@@ -100,9 +114,17 @@ class TeamResource extends Resource
             return parent::getEloquentQuery();
         }
 
-        return parent::getEloquentQuery()->whereHas('floor', function (Builder $query) {
-            $query->where('company_id', auth()->user()->company_id);
-        });
+        return parent::getEloquentQuery()
+            ->where('company_id', auth()->user()->company_id);
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (auth()->user()->hasRole('Manager')) {
+            $data['company_id'] = auth()->user()->company_id;
+        }
+        
+        return $data;
     }
 
     public static function getPages(): array
