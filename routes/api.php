@@ -11,6 +11,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\RoleInformationController;
 
 
 Route::post('/login', [LoginController::class, 'login']);
@@ -80,4 +81,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/users', [UserController::class, 'store'])->middleware('role:Administrator');
     Route::put('/users/{id}', [UserController::class, 'update'])->middleware('role:Administrator');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('role:Administrator');
+});
+//Role Information
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/role-information', [RoleInformationController::class, 'index'])->middleware('role:Administrator|Manager');
 });

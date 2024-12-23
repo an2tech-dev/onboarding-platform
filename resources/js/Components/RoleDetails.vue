@@ -1,78 +1,121 @@
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-md max-w-screen-lg mx-auto">
-    <!-- Title and Description -->
-    <div>
-      <h2 class="text-2xl text-gray-800 text-center sm:text-left">Role Overview</h2>
-      <p class="text-gray-600 mt-2 text-center sm:text-left">
-        As a Software Engineer at StarLabs, you will be responsible for developing and maintaining our software products. You will collaborate with cross-functional teams to design, implement, and deploy solutions that meet our customer needs.
-      </p>
-    </div>
+  <div class="bg-white p-4 rounded-lg">
+    <h1 class="mb-6 text-[#1F1048] text-2xl	">Role Overview</h1>
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <p class="text-[#1F1048] font-medium text-lg">Description</p>
+            <span class="text-[#1F1048] text-sm">
+              <template v-if="roleInformation.description">
+                  {{ roleInformation.description }}
+              </template>
+              <template v-else>
+                  There is no description for this role.
+              </template>
+             </span>
+        </div>
 
-    <!-- Team Information -->
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-800">Your team name</h3>
-      <p class="text-gray-700 mb-4">TechTitans</p>
-      <div class="flex items-center justify-between bg-purple-50 p-4 rounded-lg shadow-sm">
-        <!-- Profile Info -->
-        <div class="flex items-center">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Team Leader"
-            class="w-10 h-10 rounded-full mr-4"
-          />
-          <div>
-            <p class="text-purple-800 font-medium">Alex Onfroy</p>
-            <p class="text-gray-600 text-sm">alex@onfroy.com</p>
+        <div class="flex flex-col lg:flex-row justify-between gap-6 lg:max-w-[800px]">
+            <div class="flex flex-col gap-2">
+              <p class="text-[#1F1048] font-medium text-lg">Your Team Name</p>
+              <span class="text-[#1F1048] text-sm">
+                <template v-if="team">
+                    {{ team }}
+                </template>
+                <template v-else>
+                    There is no description for this role.
+                </template>
+            </span>
+            </div>
+            <div v-if="user && roleInformation" class="flex justify-between items-center p-6 bg-[#F7F2FA] rounded-xl lg:min-w-[500px]">
+              <div class="flex flex-col">
+                <p v-if="user.name" class="text-[#64568F] font-medium text-lg">{{ user.name }}</p>
+                <p v-else class="text-[#64568F] font-medium text-lg">Name not available</p>
+            
+                <span v-if="user.email" class="text-[#615B71] text-sm">{{ user.email }}</span>
+                <span v-else class="text-[#615B71] text-sm">Email not available</span>
+              </div>
+            
+              <span v-if="roleInformation.title" class="px-2 py-2 bg-[#E8DDFF] text-[#1F1048] rounded">
+                {{ roleInformation.title }}
+              </span>
+              <span v-else class="px-2 py-2 bg-[#E8DDFF] text-[#1F1048] rounded">
+                Role title not available
+              </span>
+            </div>
+            
+            <div v-else class="p-6 bg-[#F7F2FA] rounded-xl min-w-[391px] text-[#64568F] text-center">
+              <p>Data is not available.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <p class="text-[#1F1048] font-medium text-lg">Expectations</p>
+          <span class="text-[#1F1048] text-sm">
+            <template v-if="roleInformation.expectations">
+                {{ roleInformation.expectations }}
+            </template>
+            <template v-else>
+                There is no expectations for this role.
+            </template>
+           </span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <p class="text-[#1F1048] font-medium text-base">Assigned projects</p>
+        
+          <div v-if="products.length > 0" class="flex flex-wrap gap-2">
+            <div
+              class="pt-2 pb-3 px-1 bg-[#CAC4CF] rounded-[10px]"
+              v-for="(product, index) in products"
+              :key="index"
+            >
+              <span class="bg-white px-3 py-2 rounded-[8px]">
+                {{ product }}
+              </span>
+            </div>
           </div>
+          <p v-else class="text-gray-500">There are no current projects assigned.</p>
         </div>
-        <!-- Team Leader Badge -->
-        <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-md font-semibold">
-          Team leader
-        </span>
-      </div>
-    </div>
 
-    <!-- Expectations -->
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-800">Expectations</h3>
-      <ul class="list-disc list-inside text-gray-700 mt-2">
-        <li>Demonstrate technical proficiency in programming languages and frameworks.</li>
-        <li>Solve complex problems effectively and work collaboratively with the team.</li>
-        <li>Stay updated on industry trends and communicate effectively with stakeholders.</li>
-      </ul>
     </div>
-
-    <!-- Next Steps -->
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-800">Next Steps</h3>
-      <ul class="list-disc list-inside text-gray-700 mt-2">
-        <li>Introductory meetings with your team members to get to know them better and understand their roles within the organization.</li>
-        <li>Take some time to review project documentation, team guidelines, and relevant resources to familiarize yourself with our projects and processes.</li>
-        <li>Don't hesitate to reach out to your manager or colleagues if you have any questions or need clarification on any aspect of your role or projects.</li>
-      </ul>
-    </div>
-
-    <!-- Assigned Projects -->
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-800">Assigned Projects</h3>
-      <div class="flex flex-wrap gap-3 mt-4">
-        <div class="border border-gray-300 text-gray-700 text-sm px-4 py-1 rounded-full shadow-sm bg-white">
-          AveHR
-        </div>
-        <div class="border border-gray-300 text-gray-700 text-sm px-4 py-1 rounded-full shadow-sm bg-white">
-          MetryV
-        </div>
-        <div class="border border-gray-300 text-gray-700 text-sm px-4 py-1 rounded-full shadow-sm bg-white">
-          Onboarding Platform
-        </div>
-      </div>
-    </div>
+    
   </div>
 </template>
-
 <script>
+import apiService from "@/services/apiServices";
+
 export default {
-  name: "RoleDetails",
+  data() {
+    return {
+      roleInformation: {},
+      team: "",
+      products: [],
+      user: [],
+    };
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await apiService.get("/api/role-information");
+
+        const { role_information, team, products, user } = response;
+
+        this.roleInformation = role_information;
+        this.team = team;
+        this.user = user;
+        this.products = products;
+
+        console.log(user)
+
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+  },
+  created() {
+    this.fetchData();
+  },
 };
 </script>
 

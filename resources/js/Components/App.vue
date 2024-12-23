@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F4EFFC]">
+  <div class="bg-[#F4EFFC] min-h-screen">
     <div v-if="!isLoginPage" class="bg-[#F4EFFC]">
       <Welcome />
     </div>
