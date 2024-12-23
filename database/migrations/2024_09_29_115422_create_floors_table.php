@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
             $table->string('name');
             $table->integer('floor_number');
+            $table->enum('type', ['Office Floor', 'Other Activities'])->default('Office Floor');
             $table->timestamps();
         });
     }

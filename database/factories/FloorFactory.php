@@ -21,7 +21,8 @@ class FloorFactory extends Factory
         return [
             'company_id' => Company::factory(),
             'name' => $this->faker->word() . ' Floor',
-            'floor_number' => $this->faker->numberBetween(1, 30), 
+            'floor_number' => $this->faker->numberBetween(1, 30),
+            'type' => $this->faker->randomElement(['Office Floor', 'Other Activities']),
         ];
     }
 }

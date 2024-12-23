@@ -16,6 +16,7 @@ class StoreFloorRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'floor_number' => 'required|integer',
+            'type' => 'required|in:Office Floor,Other Activities',
             'company_id' => auth()->user()->hasRole('Administrator') ? 'required|exists:company,id' : 'sometimes',
             'teams' => 'nullable|array',
             'teams.*' => 'exists:teams,id'

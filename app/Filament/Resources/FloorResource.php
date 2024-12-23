@@ -66,6 +66,14 @@ class FloorResource extends Resource
             ->required()
             ->numeric();
 
+        $schema[] = Select::make('type')
+            ->options([
+                'Office Floor' => 'Office Floor',
+                'Other Activities' => 'Other Activities'
+            ])
+            ->required()
+            ->default('Office Floor');
+
         $schema[] = Select::make('teams')
             ->multiple()
             ->relationship('teams', 'name', function (Builder $query, $get) {
