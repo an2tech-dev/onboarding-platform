@@ -25,7 +25,8 @@ class User extends Authenticatable
         'password',
         'company_id',
         'team_id',
-        'role_information_id'
+        'role_information_id',
+        'image'
     ];
 
     /**
@@ -62,4 +63,15 @@ public function roleInformation()
 {
     return $this->belongsTo(RoleInformation::class);
 }
+
+public function getImageUrlAttribute()
+{
+    if ($this->image) {
+        return asset('storage/' . $this->image);
+    }
+    
+    return asset('images/default-team-image.png');
+}
+
+protected $appends = ['image_url'];
 }
