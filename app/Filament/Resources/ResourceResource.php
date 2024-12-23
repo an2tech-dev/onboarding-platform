@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\FileUpload;
 
 
 class ResourceResource extends Resource
@@ -51,8 +52,6 @@ class ResourceResource extends Resource
                 ->required();
         }
 
-        $schema[] = Forms\Components\TextInput::make('categories');
-
         $schema[] = Forms\Components\TextInput::make('categories')
             ->required()
             ->label('Categories')
@@ -68,9 +67,17 @@ class ResourceResource extends Resource
 
         $schema[] = Forms\Components\TextInput::make('url')
             ->url()
-            ->required()
             ->label('Resource URL')
             ->maxLength(255);
+
+        $schema[] = FileUpload::make('pdf_file')
+            ->label('PDF Document')
+            ->directory('resource-pdfs')
+            ->acceptedFileTypes(['application/pdf'])
+            ->maxSize(10240) // 10MB max size
+            ->downloadable()
+            ->openable()
+            ->preserveFilenames();
 
         return $form->schema($schema);
     }

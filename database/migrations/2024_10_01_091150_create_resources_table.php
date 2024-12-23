@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('categories'); 
             $table->string('title'); 
             $table->text('description');
-            $table->string('url');
+            $table->string('url')->nullable();
+            $table->string('pdf_file')->nullable();
             $table->timestamps();
         });
     }
