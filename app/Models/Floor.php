@@ -21,6 +21,11 @@ class Floor extends Model
         return $this->belongsToMany(Team::class)->withTimestamps();
     }
 
+    public function setImageAttribute($value)
+    {
+        $this->attributes['image'] = is_array($value) ? $value[0] : $value;
+    }
+
     protected static function booted()
     {
         static::saved(function ($floor) {
@@ -36,5 +41,10 @@ class Floor extends Model
                     ->update(['floor_id' => null]);
             }
         });
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
     }
 }
