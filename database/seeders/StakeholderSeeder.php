@@ -14,7 +14,33 @@ class StakeholderSeeder extends Seeder
     public function run(): void
     {
         Company::all()->each(function ($company) {
-            Stakeholder::factory(5)->create([
+            $standardStakeholders = [
+                [
+                    'name' => 'John Anderson',
+                    'role' => 'CEO',
+                ],
+                [
+                    'name' => 'Sarah Mitchell',
+                    'role' => 'Lead Investor',
+                ],
+                [
+                    'name' => 'Michael Chen',
+                    'role' => 'Strategic Partner',
+                ],
+                [
+                    'name' => 'Emily Rodriguez',
+                    'role' => 'Board Member',
+                ],
+            ];
+
+            foreach ($standardStakeholders as $stakeholder) {
+                Stakeholder::create([
+                    'company_id' => $company->id,
+                    ...$stakeholder,
+                ]);
+            }
+
+            Stakeholder::factory(3)->create([
                 'company_id' => $company->id,
             ]);
         });
