@@ -29,7 +29,11 @@ class Team extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        
+        return asset('images/default-team-image.png');
     }
 
     protected $appends = ['members', 'image_url'];
