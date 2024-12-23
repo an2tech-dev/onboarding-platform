@@ -9,7 +9,7 @@ class Floor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'name', 'floor_number'];
+    protected $fillable = ['company_id', 'name', 'floor_number', 'type', 'image'];
 
     public function company()
     {
@@ -19,6 +19,11 @@ class Floor extends Model
     public function teams()
     {
         return $this->belongsToMany(Team::class)->withTimestamps();
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->attributes['image'] = is_array($value) ? $value[0] : $value;
     }
 
     protected static function booted()
@@ -36,5 +41,10 @@ class Floor extends Model
                     ->update(['floor_id' => null]);
             }
         });
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
     }
 }

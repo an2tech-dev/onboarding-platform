@@ -14,6 +14,8 @@ use App\Filament\Resources\UserResource\Pages;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 
 class UserResource extends Resource
 {
@@ -127,6 +129,16 @@ class UserResource extends Resource
                 ->default('Employee');
         }
 
+        $schema[] = FileUpload::make('image')
+            ->image()
+            ->directory('user-images')
+            ->visibility('public')
+            ->maxSize(5120)
+            ->columnSpanFull()
+            ->preserveFilenames()
+            ->downloadable()
+            ->openable();
+
         return $form->schema($schema);
     }
 
@@ -134,9 +146,11 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('id')->sortable(),
+                ImageColumn::make('image')
+                    ->circular()
+                    ->defaultImageUrl(asset('images/default-team-image.png')),
+                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable(),

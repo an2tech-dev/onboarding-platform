@@ -20,6 +20,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreignId('company_id')->nullable()->constrained('company')->onDelete('set null');
             $table->foreignId('team_id')->nullable()->constrained('teams')->onDelete('set null');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
 

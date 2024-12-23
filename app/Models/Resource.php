@@ -15,6 +15,7 @@ class Resource extends Model
         'title',
         'description',
         'url',
+        'pdf_file',
     ];
 
     protected $casts = [

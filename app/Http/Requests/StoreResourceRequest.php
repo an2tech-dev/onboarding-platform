@@ -18,7 +18,8 @@ class StoreResourceRequest extends FormRequest
             'categories' => 'required|string',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'required|string|max:255',
+            'url' => 'string|max:255',
+            'pdf_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB max size
         ];
     }
 }

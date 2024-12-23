@@ -14,6 +14,9 @@ use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\FloorResource\Pages;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\TemporaryUploadedFile;
 
 class FloorResource extends Resource
 {
@@ -65,6 +68,28 @@ class FloorResource extends Resource
         $schema[] = TextInput::make('floor_number')
             ->required()
             ->numeric();
+
+        $schema[] = Select::make('type')
+            ->options([
+                'Office Floor' => 'Office Floor',
+                'Other Activities' => 'Other Activities'
+            ])
+            ->required()
+            ->default('Office Floor')
+            ->live();
+
+        $schema[] = FileUpload::make('image')
+            ->image()
+            ->directory('floor-images')
+            ->visibility('public')
+            ->maxSize(5120)
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'Other Activities')
+            ->helperText('Optional. Only for Other Activities floors.')
+            ->columnSpanFull()
+            ->preserveFilenames()
+            ->downloadable()
+            ->openable()
+            ->dehydrateStateUsing(fn ($state) => $state ? $state[0] : null);
 
         $schema[] = Select::make('teams')
             ->multiple()

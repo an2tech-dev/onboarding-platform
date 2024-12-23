@@ -26,6 +26,8 @@ class UpdateTeamRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:5120', // 5MB max
         ];
     }
 }

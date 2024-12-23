@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
             $table->string('description')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

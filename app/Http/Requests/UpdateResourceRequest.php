@@ -29,7 +29,8 @@ class UpdateResourceRequest extends FormRequest
             'categories' => 'sometimes|required|string',
             'title' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
-            'url' => 'sometimes|required|string|max:255',
+            'url' => 'sometimes|string|max:255',
+            'pdf_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB max size
         ];
     }
 }
