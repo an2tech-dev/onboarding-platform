@@ -19,7 +19,8 @@ class EditUser extends EditRecord
 
     protected function afterSave(): void
     {
-        $role = $this->data['role'] ?? 'Employee';
-        $this->record->syncRoles([$role]);
+        if (isset($this->data['role'])) {
+            $this->record->syncRoles([$this->data['role']]);
+        }
     }
 }

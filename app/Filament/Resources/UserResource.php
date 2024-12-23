@@ -120,8 +120,9 @@ class UserResource extends Resource
         // Role selection (single role)
         if (auth()->user()->hasRole('Administrator')) {
             $schema[] = Select::make('role')
-                ->relationship('roles', 'name')
-                ->preload()
+                ->options(function () {
+                    return \Spatie\Permission\Models\Role::all()->pluck('name', 'name');
+                })
                 ->required()
                 ->label('Role');
         } else {
