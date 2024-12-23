@@ -15,6 +15,8 @@ class StoreTeamRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:5120',
         ];
 
         if (auth()->user()->hasRole('Administrator')) {

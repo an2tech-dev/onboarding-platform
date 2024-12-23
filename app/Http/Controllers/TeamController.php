@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
+use Illuminate\Support\Facades\Storage;
 
 class TeamController extends Controller
 {
@@ -38,6 +39,10 @@ class TeamController extends Controller
             $data['company_id'] = auth()->user()->company_id;
         }
 
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('team-images', 'public');
+        }
+
         try {
             $team = Team::create($data);
             return response()->json(['message' => 'Team created successfully!', 'team' => $team], 201);
@@ -53,6 +58,14 @@ class TeamController extends Controller
 
         if (auth()->user()->hasRole('Manager') && $team->company_id !== auth()->user()->company_id) {
             return response()->json(['error' => 'Unauthorized to update this team'], 403);
+        }
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($team->image) {
+                Storage::disk('public')->delete($team->image);
+            }
+            $data['image'] = $request->file('image')->store('team-images', 'public');
         }
 
         try {

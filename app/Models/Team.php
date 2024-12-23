@@ -9,7 +9,7 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'company_id', 'description'];
+    protected $fillable = ['name', 'company_id', 'description', 'image'];
 
     protected $with = ['users'];
 
@@ -27,7 +27,12 @@ class Team extends Model
         });
     }
 
-    protected $appends = ['members'];
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+
+    protected $appends = ['members', 'image_url'];
 
     public function company()
     {

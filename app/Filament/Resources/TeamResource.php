@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TeamResource\Pages;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Storage;
 
 class TeamResource extends Resource
 {
@@ -88,6 +90,16 @@ class TeamResource extends Resource
             )
             ->preload()
             ->searchable();
+
+        $schema[] = FileUpload::make('image')
+            ->image()
+            ->directory('team-images')
+            ->visibility('public')
+            ->maxSize(5120)
+            ->columnSpanFull()
+            ->preserveFilenames()
+            ->downloadable()
+            ->openable();
 
         return $form->schema($schema);
     }
