@@ -18,11 +18,14 @@ class FloorFactory extends Factory
      */
     public function definition(): array
     {
+        $type = $this->faker->randomElement(['Office Floor', 'Other Activities']);
+        
         return [
             'company_id' => Company::factory(),
             'name' => $this->faker->word() . ' Floor',
             'floor_number' => $this->faker->numberBetween(1, 30),
-            'type' => $this->faker->randomElement(['Office Floor', 'Other Activities']),
+            'type' => $type,
+            'image' => $type === 'Other Activities' ? $this->faker->imageUrl() : null,
         ];
     }
 }

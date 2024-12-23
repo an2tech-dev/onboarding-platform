@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('floor_number');
             $table->enum('type', ['Office Floor', 'Other Activities'])->default('Office Floor');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

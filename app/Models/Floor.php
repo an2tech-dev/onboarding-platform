@@ -9,7 +9,7 @@ class Floor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'name', 'floor_number', 'type'];
+    protected $fillable = ['company_id', 'name', 'floor_number', 'type', 'image'];
 
     public function company()
     {
