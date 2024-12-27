@@ -111,7 +111,6 @@ class TeamResource extends Resource
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('company.name')->label('Company')->sortable()->searchable(),
                 TextColumn::make('name')->label('Team Name')->sortable()->searchable(),
-                TextColumn::make('created_at')->label('Created At')->dateTime()->sortable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
