@@ -58,10 +58,13 @@ class CompanyResource extends Resource
                     ->label('Company Description')
                     ->nullable(),
 
-                DatePicker::make('established')
-                    ->label('Established Date')
+                    DatePicker::make('established')
+                    ->label('Established')
                     ->nullable()
-                    ->displayFormat('Y-m-d'),
+                    ->native(false)
+                    ->displayFormat('F j, Y') 
+                    ->format('Y-m-d'), 
+
 
                 TextInput::make('office_size')
                     ->label('Office Size (sqft)')

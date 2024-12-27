@@ -40,7 +40,8 @@ class RoleInformationResource extends Resource
             ->required()
             ->maxLength(65535);
 
-        $schema[] = Forms\Components\Textarea::make('overview')
+        $schema[] = Forms\Components\RichEditor::make('next_steps')
+            ->label('Next Steps') 
             ->required()
             ->maxLength(65535);
 
@@ -79,4 +80,4 @@ class RoleInformationResource extends Resource
             'edit' => RoleInformationResource\Pages\EditRoleInformation::route('/{record}/edit'),
         ];
     }
-} 
+}
