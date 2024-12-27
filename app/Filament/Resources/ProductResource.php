@@ -63,10 +63,12 @@ class ProductResource extends Resource
             ->required()
             ->maxLength(255);
 
-        $schema[] = Forms\Components\DatePicker::make('release_date')
+            $schema[] = Forms\Components\DatePicker::make('release_date')
             ->label('Release Date')
             ->nullable()
-            ->displayFormat('Y-m-d')
+            ->native(false) 
+            ->displayFormat('F j, Y') 
+            ->format('Y-m-d')
             ->rules(['nullable', 'date'])
             ->placeholder('Select release date (optional)');
 
