@@ -57,23 +57,36 @@ class ProductResource extends Resource
 
         $schema[] = Forms\Components\TextInput::make('name')
             ->required()
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s\-_]+$/')
+            ->helperText('Only letters, numbers, spaces, hyphens and underscores allowed');
 
         $schema[] = Forms\Components\Textarea::make('description')
             ->required()
-            ->maxLength(255);
+            ->maxLength(1000)
+            ->minLength(10)
+            ->helperText('Between 10 and 1000 characters');
 
         $schema[] = Forms\Components\DatePicker::make('release_date')
             ->label('Release Date')
             ->nullable()
-            ->displayFormat('Y-m-d')
+            ->native(false)
+            ->displayFormat('F j, Y')
+            ->format('Y-m-d')
             ->rules(['nullable', 'date'])
             ->placeholder('Select release date (optional)');
 
         $schema[] = Forms\Components\FileUpload::make('product_image')
             ->label('Product Image')
             ->image()
-            ->nullable();
+            ->directory('product-images')
+            ->visibility('public')
+            ->maxSize(5120)
+            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->helperText('Maximum size: 5MB. Accepted types: JPG, PNG, WebP')
+            ->preserveFilenames()
+            ->downloadable()
+            ->openable();
 
         return $form->schema($schema);
     }

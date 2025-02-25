@@ -52,22 +52,34 @@ class CompanyResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
-                    ->label('Company Name'),
+                    ->label('Company Name')
+                    ->maxLength(255)
+                    ->regex('/^[a-zA-Z0-9\s\-_&]+$/')
+                    ->helperText('Only letters, numbers, spaces, hyphens, underscores and & allowed')
+                    ->unique(ignorable: fn ($record) => $record),
 
                 Textarea::make('description')
                     ->label('Company Description')
-                    ->nullable(),
+                    ->nullable()
+                    ->maxLength(1000)
+                    ->minLength(10)
+                    ->helperText('Minimum 10 characters if provided'),
 
                 DatePicker::make('established')
-                    ->label('Established Date')
+                    ->label('Established')
                     ->nullable()
-                    ->displayFormat('Y-m-d'),
+                    ->native(false)
+                    ->displayFormat('F j, Y')
+                    ->format('Y-m-d')
+                    ->before('today')
+                    ->helperText('Must be a date in the past'),
 
                 TextInput::make('office_size')
                     ->label('Office Size (sqft)')
                     ->numeric()
                     ->minValue(1)
-                    ->nullable(),
+                    ->maxValue(1000000)
+                    ->helperText('Enter a value between 1 and 1,000,000 sqft'),
 
                 Select::make('benefits')
                     ->multiple()
@@ -83,6 +95,8 @@ class CompanyResource extends Resource
                     ->searchable()
                     ->preload()
                     ->nullable()
+                    ->maxItems(5)
+                    ->helperText('Select up to 5 benefits')
             ]);
     }
 

@@ -54,7 +54,9 @@ class ProcessResource extends Resource
 
         $schema[] = Forms\Components\TextInput::make('name')
             ->required()
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s\-_]+$/')
+            ->helperText('Only letters, numbers, spaces, hyphens and underscores allowed');
 
         $schema[] = Forms\Components\Select::make('type')
             ->options([
@@ -75,21 +77,19 @@ class ProcessResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
-                    ->required(),
+                    ->required()
+                    ->maxLength(1000),
                 FileUpload::make('image')
                     ->image()
                     ->directory('workflow-images')
                     ->visibility('public')
                     ->maxSize(5120)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->helperText('Maximum size: 5MB. Accepted types: JPG, PNG, WebP')
             ])
-            ->columns(1)
-            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'workflow')
-            ->defaultItems(1)
-            ->addActionLabel('Add Workflow Step')
-            ->collapsible()
-            ->cloneable()
-            ->columnSpanFull()
-            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null);
+            ->minItems(1)
+            ->maxItems(10)
+            ->columns(1);
 
         $schema[] = Repeater::make('information_data')
             ->schema([

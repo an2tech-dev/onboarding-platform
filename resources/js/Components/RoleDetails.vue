@@ -60,6 +60,19 @@
            </span>
         </div>
 
+         <div class="flex flex-col gap-2">
+          <p class="text-[#1F1048] font-medium text-lg">Next Steps</p>
+          <span class="text-[#1F1048] text-sm">
+            <template v-if="roleInformation.overview">
+                {{ roleInformation.overview }}
+            </template>
+            <template v-else>
+                There are no next steps defined for this role.
+            </template>
+          </span>
+        </div>
+
+
         <div class="flex flex-col gap-2">
           <p class="text-[#1F1048] font-medium text-base">Assigned projects</p>
         
@@ -105,9 +118,7 @@ export default {
         this.user = user;
         this.products = products;
 
-        console.log(user)
-
-
+        console.log(user);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

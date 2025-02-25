@@ -30,19 +30,35 @@ class RoleInformationResource extends Resource
 
         $schema[] = Forms\Components\TextInput::make('title')
             ->required()
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s\-_]+$/')
+            ->helperText('Only letters, numbers, spaces, hyphens and underscores allowed');
 
         $schema[] = Forms\Components\Textarea::make('description')
             ->required()
-            ->maxLength(65535);
+            ->maxLength(65535)
+            ->minLength(10)
+            ->helperText('Minimum 10 characters required');
 
         $schema[] = Forms\Components\Textarea::make('expectations')
             ->required()
-            ->maxLength(65535);
+            ->maxLength(65535)
+            ->minLength(10)
+            ->helperText('Minimum 10 characters required');
 
-        $schema[] = Forms\Components\Textarea::make('overview')
+        $schema[] = Forms\Components\RichEditor::make('next_steps')
+            ->label('Next Steps')
             ->required()
-            ->maxLength(65535);
+            ->maxLength(65535)
+            ->minLength(10)
+            ->toolbarButtons([
+                'bold',
+                'italic',
+                'link',
+                'orderedList',
+                'unorderedList',
+            ])
+            ->helperText('Minimum 10 characters required');
 
         return $form->schema($schema);
     }
@@ -79,4 +95,4 @@ class RoleInformationResource extends Resource
             'edit' => RoleInformationResource\Pages\EditRoleInformation::route('/{record}/edit'),
         ];
     }
-} 
+}

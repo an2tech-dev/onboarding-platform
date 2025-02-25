@@ -66,11 +66,15 @@ class TeamResource extends Resource
         $schema[] = TextInput::make('name')
             ->required()
             ->label('Team Name')
-            ->placeholder('Enter team name');
+            ->placeholder('Enter team name')
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s\-_]+$/')
+            ->helperText('Only letters, numbers, spaces, hyphens and underscores allowed');
         
         $schema[] = Textarea::make('description')
             ->label('Description')
-            ->placeholder('Enter team description (optional)');
+            ->placeholder('Enter team description (optional)')
+            ->maxLength(1000);
 
         $schema[] = Select::make('products')
             ->multiple()
@@ -96,6 +100,8 @@ class TeamResource extends Resource
             ->directory('team-images')
             ->visibility('public')
             ->maxSize(5120)
+            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->helperText('Maximum size: 5MB. Accepted types: JPG, PNG, WebP')
             ->columnSpanFull()
             ->preserveFilenames()
             ->downloadable()
@@ -111,7 +117,6 @@ class TeamResource extends Resource
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('company.name')->label('Company')->sortable()->searchable(),
                 TextColumn::make('name')->label('Team Name')->sortable()->searchable(),
-                TextColumn::make('created_at')->label('Created At')->dateTime()->sortable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
