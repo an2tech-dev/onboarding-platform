@@ -55,29 +55,36 @@ class ResourceResource extends Resource
         $schema[] = Forms\Components\TextInput::make('categories')
             ->required()
             ->label('Categories')
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s,]+$/')
+            ->helperText('Separate categories with commas');
 
         $schema[] = Forms\Components\TextInput::make('title')
             ->required()
-            ->label('Title');
+            ->label('Title')
+            ->maxLength(255);
 
         $schema[] = Forms\Components\Textarea::make('description')
             ->required()
-            ->label('Description');
+            ->label('Description')
+            ->maxLength(1000);
 
         $schema[] = Forms\Components\TextInput::make('url')
             ->url()
             ->label('Resource URL')
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^https?:\/\/.+/')
+            ->helperText('Must be a valid URL starting with http:// or https://');
 
         $schema[] = FileUpload::make('pdf_file')
             ->label('PDF Document')
             ->directory('resource-pdfs')
             ->acceptedFileTypes(['application/pdf'])
-            ->maxSize(10240) // 10MB max size
+            ->maxSize(10240)
             ->downloadable()
             ->openable()
-            ->preserveFilenames();
+            ->preserveFilenames()
+            ->helperText('Maximum file size: 10MB. Only PDF files are accepted.');
 
         return $form->schema($schema);
     }

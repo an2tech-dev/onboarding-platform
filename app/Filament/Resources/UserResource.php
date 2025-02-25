@@ -50,17 +50,25 @@ class UserResource extends Resource
         $schema = [
             Forms\Components\TextInput::make('name')
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->regex('/^[a-zA-Z\s\-]+$/')
+                ->helperText('Only letters, spaces and hyphens allowed'),
 
             Forms\Components\TextInput::make('email')
                 ->email()
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->unique(ignorable: fn ($record) => $record)
+                ->regex('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/')
+                ->helperText('Must be a valid email address'),
 
             Forms\Components\TextInput::make('password')
                 ->password()
                 ->required()
                 ->maxLength(255)
+                ->minLength(8)
+                ->rule('regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/')
+                ->helperText('Minimum 8 characters, must include uppercase, lowercase, number and special character')
                 ->hiddenOn('edit'),
         ];
 
@@ -135,6 +143,8 @@ class UserResource extends Resource
             ->directory('user-images')
             ->visibility('public')
             ->maxSize(5120)
+            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->helperText('Maximum size: 5MB. Accepted types: JPG, PNG, WebP')
             ->columnSpanFull()
             ->preserveFilenames()
             ->downloadable()

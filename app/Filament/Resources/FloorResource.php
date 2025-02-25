@@ -63,11 +63,16 @@ class FloorResource extends Resource
 
         $schema[] = TextInput::make('name')
             ->required()
-            ->maxLength(255);
+            ->maxLength(255)
+            ->regex('/^[a-zA-Z0-9\s\-_]+$/')
+            ->helperText('Only letters, numbers, spaces, hyphens and underscores allowed');
 
         $schema[] = TextInput::make('floor_number')
             ->required()
-            ->numeric();
+            ->numeric()
+            ->minValue(-5)
+            ->maxValue(200)
+            ->helperText('Enter a number between -5 and 200');
 
         $schema[] = Select::make('type')
             ->options([
@@ -83,13 +88,9 @@ class FloorResource extends Resource
             ->directory('floor-images')
             ->visibility('public')
             ->maxSize(5120)
-            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'Other Activities')
-            ->helperText('Optional. Only for Other Activities floors.')
-            ->columnSpanFull()
-            ->preserveFilenames()
-            ->downloadable()
-            ->openable()
-            ->dehydrateStateUsing(fn ($state) => $state ? $state[0] : null);
+            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->helperText('Maximum size: 5MB. Accepted types: JPG, PNG, WebP')
+            ->hidden(fn (Forms\Get $get): bool => $get('type') !== 'Other Activities');
 
         $schema[] = Select::make('teams')
             ->multiple()
