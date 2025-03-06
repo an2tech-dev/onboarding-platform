@@ -1,5 +1,5 @@
 <template>
- <div class="flex flex-1 bg-[#F4EFFC] min-h-screen">
+ <div class="flex flex-1 bg-[#F4EFFC]">
     <div v-for="company in companies" :key="company.id" class="bg-white shadow-lg rounded-lg p-6 mb-8">
       <h2 class="text-2xl mb-4">Exploring our company</h2>
 
@@ -70,7 +70,7 @@
       <div
         v-if="selectedProduct"
         class="modal show" >
-          <button @click="closeProductDetails" class="modal-close" >✕</button>
+          <button @click="closeProductDetails" class="modal-close" ></button>
         <div class="modal-content">
 
           <img

@@ -1,14 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../Components/Login.vue';
 import Home from '../Components/Home.vue';
-import Overview from '../Components/Overview.vue'; 
-import Teams from '../Components/Teams.vue'; 
+import Overview from '../Components/Overview.vue';
+import Teams from '../Components/Teams.vue';
 import RoleDetails from '../Components/RoleDetails.vue';
-import ProcessesSchedules from '../Components/ProcessesSchedules.vue'; 
-import Resources from '../Components/Resources.vue'; 
-import SignOut from '../Components/SignOut.vue'; 
-
-
+import ProcessesSchedules from '../Components/ProcessesSchedules.vue';
+import Resources from '../Components/Resources.vue';
+import SignOut from '../Components/SignOut.vue';
 
 const routes = [
   { path: '/login', name: 'Login', component: Login },
@@ -19,8 +17,6 @@ const routes = [
   { path: '/processes-schedules', name: 'ProcessesSchedules', component: ProcessesSchedules },
   { path: '/resources', name: 'Resources', component: Resources },
   { path: '/sign-out', name: 'SignOut', component: SignOut }
-
-
 ];
 
 const router = createRouter({

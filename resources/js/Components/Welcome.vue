@@ -15,7 +15,7 @@
               Welcome to {{ company.name }}
             </h1>
             <p class="text-base leading-6 text-[#1F1048] mt-2 tracking-wide">
-              {{ company.description || 'We are thrilled to have you join our team and embark on this exciting journey together.' }}
+              We are thrilled to have you join our team and embark on this exciting journey together.
             </p>
           </div>
         </div>

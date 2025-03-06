@@ -32,7 +32,7 @@
                   {{ resource.title }}
                 </h3>
                 <p class="text-xs sm:text-sm text-gray-600">
-                  {{ resource.categories }}
+                  {{ resource.description }}
                 </p>
               </div>
               <span class="text-gray-400 text-lg font-bold">&gt;</span>
