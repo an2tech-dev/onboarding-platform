@@ -1,12 +1,16 @@
 <template>
-        <p class="text-xl text-gray-700">This is the sign out page.</p>
-   </template>
-  
-  <script>
-  export default {
-    name: 'SignOut',
-  };
-  </script>
-  
-  <style scoped>
-  </style>
+  <p class="text-xl text-gray-700">Signing out...</p>
+</template>
+
+<script>
+export default {
+  name: 'SignOut',
+  beforeMount() {
+    // Remove authentication token
+    localStorage.removeItem('token');
+
+    // Redirect to login
+    this.$router.push({ name: 'Login' });
+  }
+};
+</script>
